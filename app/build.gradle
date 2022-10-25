@@ -6,7 +6,7 @@ def keyProps = new Properties()
 def keyPropsFile = rootProject.file('keystore/key.properties')
 if (keyPropsFile.exists()) { keyProps.load(new InputStreamReader(new FileInputStream(keyPropsFile), "UTF-8")) }
 
-println(keyPropsFile)
+println("" +keyPropsFile + keyPropsFile.exists() + keyProps['storeFile'])
 
 
 android {
