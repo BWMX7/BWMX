@@ -2,6 +2,11 @@ plugins {
     id 'com.android.application'
 }
 
+def keyProps = new Properties()
+def keyPropsFile = rootProject.file('keystore/keystore.properties')
+if (keyPropsFile.exists()) { keyProps.load(new FileInputStream(keyPropsFile)) }
+
+
 android {
     compileSdk 31
 
@@ -12,6 +17,16 @@ android {
         versionCode 1
         versionName "3.0"
     }
+
+    signingConfigs {
+        release {
+            keyAlias keyProps['keyAlias']
+            keyPassword keyProps['keyPassword']
+            storeFile keyProps['storeFile'] ? file(keyProps['storeFile']) : null
+            storePassword keyProps['storePassword']
+        }
+    }
+
 }
 
 dependencies {
