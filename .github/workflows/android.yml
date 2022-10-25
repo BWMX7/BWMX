@@ -29,5 +29,5 @@ jobs:
       # don't upload the artifacts if it's a pull request
       if: ${{ !github.event.pull_request }}
       with:
-      path: '/build/outputs/apk/release/*.apk'
-      name: BWMX-release-${{ github.event.head_commit.id }}
+        path: '/build/outputs/apk/release/*.apk'
+        name: BWMX-release-${{ github.event.head_commit.id }}
