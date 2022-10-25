@@ -35,9 +35,6 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true //是否清理无用资源,依赖于minifyEnabled
-            zipAlignEnabled true //是否启用zipAlign压缩
             signingConfig signingConfigs.release
         }
     }
