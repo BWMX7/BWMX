@@ -109,7 +109,7 @@ public class Main implements IXposedHookLoadPackage {
                                     MiniAppLogin.Hook();
                                     TroopMemberListHook.Hook();
                                     MsgListScrollerHook.Hook();
-                                    BubbleTextColorHook.Hook();
+                                    if (BubbleTextColorHook.Switch) BubbleTextColorHook.Hook();
                                 }
                             });
                         }

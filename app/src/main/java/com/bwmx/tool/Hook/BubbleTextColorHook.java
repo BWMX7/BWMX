@@ -15,7 +15,12 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class BubbleTextColorHook {
     public static ChangeBubbleData BubbleData = new ChangeBubbleData();
-    public static Boolean Switch = (Boolean) BubbleData.GetItemData("ThemeId_2028656", "Switch");
+    public static Boolean Switch = false;
+
+    static {
+        Boolean data = (Boolean) BubbleData.GetItemData("ThemeId_2028656", "Switch");
+        if (data != null) Switch = data;
+    }
 
     public static void Hook() {
         XC_MethodHook MethodHook = new XC_MethodHook() {
@@ -85,7 +90,7 @@ public class BubbleTextColorHook {
 
 
 
-        if (Switch != null && Switch) {
+        if (Switch) {
             Method MethodIfExists1 = MethodFinder.GetMethod("TextItemBuilder", "Color");
             if (MethodIfExists1 != null) {
                 XposedBridge.hookMethod(MethodIfExists1, MethodHook);

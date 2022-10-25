@@ -46,10 +46,9 @@ public class AddPluginToolHook {
                             break;
                         case "SetNewColor":
                             obj[0] = BubbleTextColorHook.BubbleData.SetItemData((String) objArr[0], (String) objArr[1], objArr[2]);
-                            if (BubbleTextColorHook.Switch == null || !BubbleTextColorHook.Switch) {
-                                BubbleTextColorHook.Switch = true;
+                            if (!BubbleTextColorHook.Switch) {
                                 obj[1] = BubbleTextColorHook.BubbleData.SetItemData((String) objArr[0], "Switch", true);
-                                BubbleTextColorHook.Hook();
+                                System.exit(0);
                             }
                             break;
                         case "ChangeStopScroller":
