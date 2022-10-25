@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://nexus.anguomob.com/repository/total/' }
+        maven {
+            url 'https://artifact.bytedance.com/repository/pangle'
+        }
+        // 友盟使用
+        maven { url 'https://repo1.maven.org/maven2/' }
+        //xupdate
+        maven { url "https://jitpack.io" }
+    }
+}
+
+rootProject.name = "BWMX"
+include ':app'
