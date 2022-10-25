@@ -40,8 +40,5 @@ android {
             zipAlignEnabled true //是否启用zipAlign压缩
             signingConfig signingConfigs.release
         }
-            enableV1Signing = true
-            enableV2Signing = true
-            enableV3Signing = true
     }
 }
