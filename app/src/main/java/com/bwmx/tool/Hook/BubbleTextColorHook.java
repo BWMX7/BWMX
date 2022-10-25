@@ -15,6 +15,7 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class BubbleTextColorHook {
     public static ChangeBubbleData BubbleData = new ChangeBubbleData();
+    public static Boolean Switch = (Boolean) BubbleData.GetItemData("ThemeId_2028656", "Switch");
 
     public static void Hook() {
         XC_MethodHook MethodHook = new XC_MethodHook() {
@@ -82,19 +83,23 @@ public class BubbleTextColorHook {
             }
         };
 
-        Method MethodIfExists1 = MethodFinder.GetMethod("TextItemBuilder", "Color");
-        if (MethodIfExists1 != null) {
-            XposedBridge.hookMethod(MethodIfExists1, MethodHook);
-        }
 
-        Method MethodIfExists2 = MethodFinder.GetMethod("ReplyTextItemBuilder", "Color");
-        if (MethodIfExists2 != null) {
-            XposedBridge.hookMethod(MethodIfExists2, MethodHook);
-        }
 
-        Method MethodIfExists3 = MethodFinder.GetMethod("MixedMsgItemBuilder", "Color");
-        if (MethodIfExists3 != null) {
-            XposedBridge.hookMethod(MethodIfExists3, MethodHook);
+        if (Switch != null && Switch) {
+            Method MethodIfExists1 = MethodFinder.GetMethod("TextItemBuilder", "Color");
+            if (MethodIfExists1 != null) {
+                XposedBridge.hookMethod(MethodIfExists1, MethodHook);
+            }
+
+            Method MethodIfExists2 = MethodFinder.GetMethod("ReplyTextItemBuilder", "Color");
+            if (MethodIfExists2 != null) {
+                XposedBridge.hookMethod(MethodIfExists2, MethodHook);
+            }
+
+            Method MethodIfExists3 = MethodFinder.GetMethod("MixedMsgItemBuilder", "Color");
+            if (MethodIfExists3 != null) {
+                XposedBridge.hookMethod(MethodIfExists3, MethodHook);
+            }
         }
 
 //        Method MethodIfExists2 = MethodFinder.GetMethod("VipData", "getColorName");

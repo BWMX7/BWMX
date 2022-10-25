@@ -32,7 +32,7 @@ public class AddPluginToolHook {
                     super.afterHookedMethod(param);
                     String name = (String) param.args[0];
                     Object[] objArr = (Object[]) param.args[1];
-                    Object[] obj = new Object[1];
+                    Object[] obj = new Object[2];
 //                    FileUnits.writelog("[萌块]AddClassHook \n" + name);
                     switch (name) {
                         case "CheckLoad":
@@ -45,7 +45,12 @@ public class AddPluginToolHook {
                             obj[0] = PluginTool.RemoveColor((Bitmap) objArr[0], (int) objArr[1], (int) objArr[2]);
                             break;
                         case "SetNewColor":
-                            obj[0] = BubbleTextColorHook.BubbleData.SetItemData((String) objArr[0], (String) objArr[1], (Integer) objArr[2]);
+                            obj[0] = BubbleTextColorHook.BubbleData.SetItemData((String) objArr[0], (String) objArr[1], objArr[2]);
+                            if (BubbleTextColorHook.Switch == null || !BubbleTextColorHook.Switch) {
+                                BubbleTextColorHook.Switch = true;
+                                obj[1] = BubbleTextColorHook.BubbleData.SetItemData((String) objArr[0], "Switch", true);
+                                BubbleTextColorHook.Hook();
+                            }
                             break;
                         case "ChangeStopScroller":
                             obj[0] = MsgListScrollerHook.ChangeStopScroller((Boolean) objArr[0]);
