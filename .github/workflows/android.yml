@@ -30,4 +30,4 @@ jobs:
       if: ${{ !github.event.pull_request }}
       with:
       path: 'BWMX/build/outputs/apk/release/*.apk'
-      name: 'BWMX-release-${{ github.event.head_commit.id }}
+      name: BWMX-release-${{ github.event.head_commit.id }}
