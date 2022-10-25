@@ -23,11 +23,11 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew :BWMX:assembleRelease
+      run: ./gradlew :app:assembleRelease
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       # don't upload the artifacts if it's a pull request
       if: ${{ !github.event.pull_request }}
       with:
-        path: 'BWMX/build/outputs/apk/release/*.apk'
+        path: 'app/build/outputs/apk/release/*.apk'
         name: 萌块-release-${{ github.event.head_commit.id }}
