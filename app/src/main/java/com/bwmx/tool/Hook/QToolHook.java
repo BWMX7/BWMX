@@ -9,7 +9,29 @@
 //import de.robv.android.xposed.XC_MethodHook;
 //import de.robv.android.xposed.XposedBridge;
 //import de.robv.android.xposed.XposedHelpers;
-//
+
+//    private static XC_MethodHook.Unhook PassHook;
+//XposedHelpers.findAndHookConstructor(XC_MethodHook.class, new XC_MethodHook() {
+//                @Override
+//                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+//                    super.beforeHookedMethod(param);
+//                    Class<?> clazz = param.thisObject.getClass();
+//                    QToolHook.AddMethod(clazz);
+//                }
+//            });
+
+//        }
+//        else {
+//            XposedHelpers.findAndHookMethod(ContextWrapper.class, "attachBaseContext", Context.class, new XC_MethodHook() {
+//                @Override
+//                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+//                    Context context = (Context) param.args[0];
+//                    ClassLoader cl = context.getClassLoader();
+//                    AddMethod(cl);
+//                }
+//            });
+
+
 //public class QToolHook {
 //
 //    public static void AddMethod(Class clazz) throws NoSuchMethodException, IOException

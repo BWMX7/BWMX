@@ -4,6 +4,46 @@
 //import java.lang.reflect.Field;
 //import java.util.Arrays;
 //
+//    public static ClassLoader newLoader;
+//                        newLoader = this.getClass().getClassLoader();
+//                        writelog("[萌块]myclassLoader：" + newLoader);
+//
+//                        try {
+//                            AddClassLoader.add(mLoader,newLoader);
+//                        } catch (Throwable e) {
+//                            StackTraceElement[] wodelogs = e.getStackTrace();
+//                            String log = "";
+//                            // 使用for循环打印 调用栈查看调用关系
+//                            for (int i = 0; i < wodelogs.length; i++) {
+//                                log += "\n" + wodelogs[i].toString();
+//                            }
+//                            writelog("[萌块]myclassLoader：" + log);
+//                        }
+//                        writelog("[萌块]myclassLoader：" + newLoader);
+
+//                        Method MethodIfExists2 = MethodFinder.GetMethod("ClassLoader");
+//                        if (MethodIfExists2 != null) {
+//                            XposedBridge.hookMethod(MethodIfExists2, new XC_MethodHook() {
+//                                @Override
+//                                protected void afterHookedMethod(MethodHookParam param){
+//                                    writelog("[萌块]getclassLoader" +param.getResult());
+//                                }
+//                            });
+//                        }
+//
+//                        Method MethodIfExists3 = MethodFinder.GetMethod("AddMyClassloader");
+//                        if (MethodIfExists3 != null) {
+//                            XposedBridge.hookMethod(MethodIfExists3, new XC_MethodHook() {
+//                                @Override
+//                                protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+//                                    super.afterHookedMethod(param);
+//                                    writelog("[萌块]myclassLoader：" + param.args[0]);
+//                                    param.args[0] = newLoader;
+//                                }
+//                            });
+//                        }
+
+
 //public class AddClassLoader {
 //    private static boolean SetDexElements(ClassLoader mLoader, Object[] dexElementsResut, int conunt) {
 //        try {

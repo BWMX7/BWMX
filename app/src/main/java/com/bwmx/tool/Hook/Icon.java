@@ -13,6 +13,12 @@
 //import de.robv.android.xposed.XposedBridge;
 //import de.robv.android.xposed.callbacks.XC_InitPackageResources;
 //
+//    @Override
+//    public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
+//        writelog("[萌块]Icon"+resparam);
+//        Icon.handleInitPackageResources(resparam);
+//    }
+
 //public class Icon implements IXposedHookInitPackageResources {
 //    public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
 //        //只替换systemui应用的资源
