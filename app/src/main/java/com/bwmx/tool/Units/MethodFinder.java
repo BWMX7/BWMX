@@ -8,6 +8,7 @@ import com.bwmx.tool.Main;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import de.robv.android.xposed.XposedHelpers;
@@ -74,8 +75,12 @@ public class MethodFinder {
                 return FindClass(className);
             }
             case "QQAppInterface": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.app.QQAppInterface");
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.app.QQAppInterface";
+                return FindClass(className);
+            }
+            case "BaseApplicationImpl": {
+                String className = "com.tencent.common.app.BaseApplicationImpl";
+                return FindClass(className);
             }
             case "BaseChatPie": {
                 String className = "com.tencent.mobileqq.activity.aio.core.BaseChatPie";
@@ -209,6 +214,14 @@ public class MethodFinder {
                 } else if (QQ_version >= 8000) return null;
                 return FindClass(className.get());
             }
+            case "RecentUser": {
+                String className = "com.tencent.mobileqq.data.RecentUser";
+                return FindClass(className);
+            }
+            case "ForwardSelectionRecentFriendGridAdapter": {
+                String className = "com.tencent.mobileqq.adapter.ForwardSelectionRecentFriendGridAdapter";
+                return FindClass(className);
+            }
 //            case "BaseAuthorityPresenter": {
 //                AtomicReference<String> className = new AtomicReference<>("com.tencent.open.agent.auth.presenter.BaseAuthorityPresenter");
 //                return FindClass(className.get());
@@ -229,10 +242,11 @@ public class MethodFinder {
                 String methodName = "attachBaseContext";
                 return FindMethod(classes, methodName, Context.class);
             }
+            case "QQAppInterface.onCreate": {
+                return FindMethod(classes, "onCreate", Bundle.class);
+            }
             case "QQAppInterface.unitTestLog": {
-                AtomicReference<String> methodName = new AtomicReference<>("unitTestLog");
-//                if (QQ_version < 8845) return null;
-                return FindMethod(classes, methodName.get(), String.class, Object[].class);
+                return FindMethod(classes, "unitTestLog", String.class, Object[].class);
             }
 //            case "AddMyClassloader": {
 //                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.qfix.AndroidNClassLoader");
@@ -323,6 +337,12 @@ public class MethodFinder {
                 else if (QQ_version >= 8845) methodName.set("X4");
                 else if (QQ_version >= 8000) return null;
                 return FindMethod(classes, methodName.get(), int.class);
+            }
+            case "ForwardSelectionRecentFriendGridAdapter.DisplayData": {
+                AtomicReference<String> methodName = new AtomicReference<>("b");
+                if (QQ_version >= 8845) methodName.set("f");
+                else if (QQ_version >= 8000) return null;
+                return FindMethod(classes, methodName.get(), List.class);
             }
         }
         return null;
