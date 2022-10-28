@@ -2,6 +2,8 @@ package com.bwmx.tool.Units;
 
 import android.os.Environment;
 
+import com.bwmx.tool.Main;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +12,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -25,11 +29,23 @@ public class FileUnits {
         File file2 = new File(file, "log.txt");
         if (file2.exists() && file2.length() > 102400) {
             boolean delete = file2.delete();
+            writelog("刪除日志" + (delete ? "成功" : "失败"));
         }
     }
 
-    public static boolean writelog(String data) {
-        XposedBridge.log("[萌块]" + data);
+    public static String GetNowTime(String format) {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
+            return simpleDateFormat.format(System.currentTimeMillis());
+        } catch (Exception e) {
+            return GetNowTime("yyyy-MM-dd HH:mm:ss");
+        }
+    }
+
+    public static boolean writelog(String log) {
+        String log2 = "[" + Main.ProcessName + "]" + log;
+        XposedBridge.log("[萌块]" + log2);
+        String data = "[" + GetNowTime("MM-dd HH:mm:ss.SS") + "]" + log2;
         try {
             File file = new File(Path, "log.txt");
             AtomicBoolean create = new AtomicBoolean(true);
@@ -44,7 +60,7 @@ public class FileUnits {
             }
         }
         catch (IOException e){
-            XposedBridge.log(e);
+            XposedBridge.log("[萌块][" + Main.ProcessName + "]WriteLog Error\n" + e);
         }
         return false;
     }

@@ -35,16 +35,16 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
     public static Object Runtime;
     public static String MyUin;
 
-    public static String ProcessName;
+    public static String ProcessName = "QQ:Main";
     protected static String HookName = "MainHook";
 //    protected static Boolean Switch = false;
     protected static XC_MethodHook.Unhook Unhook1;
 //    protected static XC_MethodHook MethodHook1;
 
 
-    static {
-        Log(" -> HookInit");
-    }
+//    static {
+//        Log(" -> HookInit");
+//    }
 
     public static void Log(String log)
     {
@@ -55,7 +55,6 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
         if (loadPackageParam.packageName.equals("com.tencent.mobileqq")) {
             ProcessName = loadPackageParam.processName.replace("com.tencent.mobileqq", "");
             if (!ProcessName.equals("")) return;
-            else ProcessName = "QQ:Main";
             Log("-> Load QQ");
 //            if (mLoader == null)
                 mLoader = loadPackageParam.classLoader;
@@ -75,7 +74,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                         Log("HostInfo：" + HostInfo.getVersion() + "_" + HostInfo.getVerCode());
 
                         AddPluginToolHook.Hook();
-                        SignatureCheckHook.Hook2();
+                        SignatureCheckHook.Init2();
                         ThemeSwitcherHook.Hook();
 //                        VipColorNickHook.Hook();
 
@@ -87,7 +86,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                                     super.afterHookedMethod(param);
                                     StructMsgHook.Hook();
-                                    SignatureCheckHook.Hook1();
+                                    SignatureCheckHook.Init1();
                                     MiniAppLogin.Hook();
                                     TroopMemberListHook.Hook();
                                     MsgListScrollerHook.Init();

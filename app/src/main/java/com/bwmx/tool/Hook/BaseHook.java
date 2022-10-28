@@ -4,22 +4,23 @@ package com.bwmx.tool.Hook;
 import com.bwmx.tool.Units.FileUnits;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 
 
 public class BaseHook {
-    protected static String HookName;
-    protected static Boolean Switch = false;
-    protected static XC_MethodHook.Unhook Unhook1;
-    protected static XC_MethodHook MethodHook1;
+    protected static String HookName = "BaseHook";
+//    protected static Boolean Switch = false;
+//    protected static XC_MethodHook MethodHook1;
+//    protected static XC_MethodHook.Unhook Unhook1;
 
 
 
-    public static void Log(String log)
+    private static void Log(String log)
     {
-        FileUnits.writelog(log);
+        FileUnits.writelog("[" + HookName + "]" + log);
     }
 
     public static XC_MethodHook.Unhook Hook(Method method,XC_MethodHook methodHook, XC_MethodHook.Unhook unhook)
@@ -45,7 +46,7 @@ public class BaseHook {
         {
             if (unhook == null) return true;
         }
-        FileUnits.writelog( HookName + "488 false");
+//        Log(Arrays.toString(unhooks) + "NoNull");
         return false;
     }
 

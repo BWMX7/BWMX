@@ -15,6 +15,12 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class BubbleTextColorHook extends BaseHook{
     public static ChangeBubbleData BubbleData = new ChangeBubbleData();
+
+    public static String HookName = "BubbleTextColorHook";
+    public static Boolean Switch;
+
+    private static final XC_MethodHook MethodHook1;
+    private static XC_MethodHook.Unhook Unhook1;
     private static XC_MethodHook.Unhook Unhook2;
     private static XC_MethodHook.Unhook Unhook3;
 
@@ -92,10 +98,13 @@ public class BubbleTextColorHook extends BaseHook{
 
     public static void Init()
     {
-        HookName = "[BubbleTextColorHook]";
         Log(" -> HookInit");
     }
 
+    private static void Log(String log)
+    {
+        FileUnits.writelog("[" + HookName + "]" + log);
+    }
 
     public static Boolean Hook() {
         Method MethodIfExists1 = MethodFinder.GetMethod("TextItemBuilder", "Color");
@@ -134,10 +143,5 @@ public class BubbleTextColorHook extends BaseHook{
 //                }
 //            });
 //        }
-
-    public static void Log(String log)
-    {
-        FileUnits.writelog(HookName + log);
-    }
 
 }

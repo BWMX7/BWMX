@@ -1,18 +1,21 @@
 package com.bwmx.tool.Hook;
 
 
-import androidx.annotation.NonNull;
-
 import com.bwmx.tool.Units.FileUnits;
 import com.bwmx.tool.Units.MethodFinder;
 
 import java.lang.reflect.Method;
 
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 
 
 public class MsgListScrollerHook extends BaseHook{
+    protected static String HookName = "MsgListScrollerHook";
+    protected static Boolean Switch = false;
 
+    protected static XC_MethodHook MethodHook1;
+    protected static XC_MethodHook.Unhook Unhook1;
 
     static  {
         MethodHook1 = new XC_MethodReplacement() {
@@ -24,7 +27,7 @@ public class MsgListScrollerHook extends BaseHook{
 //                    for(int i = 0;i<wodelogs.length;i++){
 //                        log +=  wodelogs[i].toString();
 //                    }
-                FileUnits.writelog("TroopMsgListScroller stop once scroll" );
+                Log("Stop Once Scroll" );
 //                    FileUnits.writelog("TroopMsgListScroller\n" + log);
 //                    if (OPEN) FileUnits.writelog("TroopMsgListScroller stop once scroll" );
 //                    else {
@@ -37,26 +40,26 @@ public class MsgListScrollerHook extends BaseHook{
         };
     }
 
-    public static void Init()
-    {
-        HookName = "[MsgListScrollerHook]";
+    public static void Init() {
         Log(" -> HookInit");
-        ChangeSwitch(true);
+//        ChangeSwitch(true);
     }
 
-    @NonNull
-    public static Boolean Hook() {
+    private static void Log(String log) {
+        FileUnits.writelog("[" + HookName + "]" + log);
+    }
+
+    private static Boolean Hook() {
         Method MethodIfExists1 = MethodFinder.GetMethod("MsgListScroller", "scrollto0");
         //        Method MethodIfExists2 = MethodFinder.GetMethod("MsgListScroller", "scroll");
 //        if (MethodIfExists1 != null && MethodIfExists2 != null) {
 //                FileUnits.writelog("StructMsgFactory OK");
         Unhook1 = Hook(MethodIfExists1, MethodHook1, Unhook1);
-        Log("Hook " + Unhook1);
+//        Log("Hook " + Unhook1);
         return !HasNull(Unhook1);
     }
 
-    @NonNull
-    public static Boolean UnHook() {
+    private static Boolean UnHook() {
         Unhook1 = UnHook(Unhook1);
 //        Log(" UnHook " +Unhook1);
         return HasNull(Unhook1);
@@ -65,7 +68,7 @@ public class MsgListScrollerHook extends BaseHook{
     public static Boolean ChangeSwitch(Boolean newSwitch)
     {
         Switch = ChangeSwitch(newSwitch,Switch);
-        FileUnits.writelog( HookName + Switch);
+        Log("ChangeSwitch To " + Switch);
         if (Switch) return Hook();
         else return !UnHook();
     }
@@ -78,8 +81,4 @@ public class MsgListScrollerHook extends BaseHook{
 //        return OPEN;
 //    }
 
-    public static void Log(String log)
-    {
-        FileUnits.writelog(HookName + log);
-    }
 }
