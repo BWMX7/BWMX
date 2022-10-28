@@ -35,15 +35,27 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
     public static Object Runtime;
     public static String MyUin;
 
+    public static String ProcessName;
+    protected static String HookName = "MainHook";
+//    protected static Boolean Switch = false;
+    protected static XC_MethodHook.Unhook Unhook1;
+//    protected static XC_MethodHook MethodHook1;
+
+
     static {
-        HookName = "[MainHook]";
-//        Log(" -> HookInit");
+        Log(" -> HookInit");
     }
 
+    public static void Log(String log)
+    {
+        FileUnits.writelog("[" + HookName + "] " + log);
+    }
 
     public void handleLoadPackage(@NonNull XC_LoadPackage.LoadPackageParam loadPackageParam) {
         if (loadPackageParam.packageName.equals("com.tencent.mobileqq")) {
-            HookName += loadPackageParam.processName + " ";
+            ProcessName = loadPackageParam.processName.replace("com.tencent.mobileqq", "");
+            if (!ProcessName.equals("")) return;
+            else ProcessName = "QQ:Main";
             Log("-> Load QQ");
 //            if (mLoader == null)
                 mLoader = loadPackageParam.classLoader;
@@ -108,11 +120,6 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                 });
             }
         }
-    }
-
-    public static void Log(String log)
-    {
-        FileUnits.writelog(HookName + log);
     }
 }
 
