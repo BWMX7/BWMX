@@ -53,11 +53,14 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
 
     public void handleLoadPackage(@NonNull XC_LoadPackage.LoadPackageParam loadPackageParam) {
         if (loadPackageParam.packageName.equals("com.tencent.mobileqq")) {
-            ProcessName = loadPackageParam.processName.replace("com.tencent.mobileqq", "");
-            if (!ProcessName.equals("")) return;
+
+            String processName = loadPackageParam.processName.replace("com.tencent.mobileqq", "QQ");
+//            if (!processName.equals("")) return;
+            if (!processName.equals("QQ")) ProcessName = processName;
+            if (!ProcessName.contains("Main")&&!ProcessName.contains("openSdk")) return;
             Log("-> Load QQ");
 //            if (mLoader == null)
-                mLoader = loadPackageParam.classLoader;
+            mLoader = loadPackageParam.classLoader;
 
             Method MethodIfExists1 = MethodFinder.GetMethod("QFixApplication", "attachBaseContext");
             if (MethodIfExists1 != null && Unhook1 == null) {
@@ -73,8 +76,11 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                         HostInfo.Init();
                         Log("HostInfo：" + HostInfo.getVersion() + "_" + HostInfo.getVerCode());
 
+                        if (ProcessName.contains("openSdk")) {
+                            SignatureCheckHook.Init2();
+                            return;
+                        }
                         AddPluginToolHook.Hook();
-                        SignatureCheckHook.Init2();
                         ThemeSwitcherHook.Hook();
 //                        VipColorNickHook.Hook();
 

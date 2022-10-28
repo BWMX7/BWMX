@@ -368,8 +368,10 @@ public class APKData extends BaseData{
         AtomicReference<String> md5 = new AtomicReference<>((String) GetItemData(pkgname, "SignatureMD5"));
         if (md5.get() == null) md5.set(GetLocalSignature(pkgname));
 //        if (md5.length() == 31) md5 = "0" + md5;
-        md5.set(String.format("%32s", md5.get()));// 00000abc
-        return md5.get();
+        String sign = "00000000000000000000000000000000" + md5.get();
+//        md5.set(String.format("%32s", md5.get()));// 00000abc
+//        return md5.get();
+        return sign.substring(sign.length() - 32);
     }
 
 }
