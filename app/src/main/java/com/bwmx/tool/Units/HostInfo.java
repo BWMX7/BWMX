@@ -26,7 +26,7 @@ public class HostInfo {
 
 
         } catch (Throwable e) {
-            FileUnits.writelog("[萌块]HostInfo"+e);
+            FileUnits.writelog("HostInfo"+e);
         }
     }
     public static int getVerCode(){

@@ -2,8 +2,6 @@ package com.bwmx.tool.Units.Data;
 
 import android.text.TextUtils;
 
-import com.bwmx.tool.Units.FileUnits;
-
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -359,7 +357,7 @@ public class APKData extends BaseData{
 
     public boolean PutUserSignature(Object jsonObject)
     {
-//        FileUnits.writelog("[萌块]APKData \n" + jsonObject);
+//        FileUnits.writelog("APKData \n" + jsonObject);
         if (jsonObject instanceof JSONObject) {
             return SetItemData((JSONObject) jsonObject);
         }

@@ -1,8 +1,8 @@
 package com.bwmx.tool.Hook;
 
-import com.bwmx.tool.Units.MethodFinder;
 import com.bwmx.tool.Units.Data.APKData;
 import com.bwmx.tool.Units.FileUnits;
+import com.bwmx.tool.Units.MethodFinder;
 
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
@@ -25,8 +25,8 @@ public class SignatureCheckHook {
                     String qm = APK.GetSignature(text);
                     if (qm != null) {
                         param.setResult(qm);
-                        //writelog("[萌块]" + classIfExists + "has Hooked!");
-                        FileUnits.writelog("[萌块]ForwardShareCardSignature -> " + text + " :  " + qm);
+                        //writelog("" + classIfExists + "has Hooked!");
+                        FileUnits.writelog("ForwardShareCardSignature -> " + text + " :  " + qm);
                     }
                 }
             });
@@ -43,9 +43,9 @@ public class SignatureCheckHook {
                     String qm = strArr[0];
 //                    String md5 = strArr[1];
                     String time = strArr[2];
-                    FileUnits.writelog("[萌块]VirtualCheck local -> " + pkgname + " : " + qm);
+                    FileUnits.writelog("VirtualCheck local -> " + pkgname + " : " + qm);
                     String qm2 = APK.GetSignature(pkgname);
-                    FileUnits.writelog("[萌块]VirtualCheck replace -> " + pkgname + " : " + qm2);
+                    FileUnits.writelog("VirtualCheck replace -> " + pkgname + " : " + qm2);
                     if (qm != null && !qm2.contains(qm)) {
                         StringBuilder sb = new StringBuilder();
                         try {
@@ -63,10 +63,10 @@ public class SignatureCheckHook {
                             }
                         }
                         catch (NoSuchAlgorithmException e){
-                            FileUnits.writelog("[萌块]VirtualCheck Error\n" + e);
+                            FileUnits.writelog("VirtualCheck Error\n" + e);
                         }
                         strArr[1] = sb.toString().toUpperCase(Locale.ROOT);
-//                        FileUnits.writelog("[萌块]VirtualCheck new md5 -> " + pkgname + " : " + strArr[1]);
+//                        FileUnits.writelog("VirtualCheck new md5 -> " + pkgname + " : " + strArr[1]);
                         param.setResult(strArr);
                     }
 
@@ -79,7 +79,7 @@ public class SignatureCheckHook {
                 protected void beforeHookedMethod(MethodHookParam param) {
                     Boolean check = (Boolean) param.args[0];
                     int id = (int) param.args[1];
-                    FileUnits.writelog("[萌块]AuthCheck -> " + check + " : " + id);
+                    FileUnits.writelog("AuthCheck -> " + check + " : " + id);
                     param.args[0] = true;
                 }
             });

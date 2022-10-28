@@ -20,14 +20,14 @@ public class BaseData {
         try {
         FileName = fileName;
         MethodName = methodName;
-        FileUnits.writelog("[萌块]" + MethodName + " Init -> " + FileName);
+        FileUnits.writelog("" + MethodName + " Init -> " + FileName);
         String json = FileUnits.ReadStringFromFile(FileName);
         if (json != null) Data = new JSONObject(json);
         } catch (JSONException e) {
-            FileUnits.writelog("[萌块]" + MethodName + " Init\n" + e);
+            FileUnits.writelog("" + MethodName + " Init\n" + e);
         }
         if (Data == null) Data = new JSONObject();
-//        FileUnits.writelog("[萌块]" + MethodName + " Init -> " + this);
+//        FileUnits.writelog("" + MethodName + " Init -> " + this);
     }
 
     public boolean IfHasSetData(String SetName)
@@ -41,12 +41,12 @@ public class BaseData {
             if (IfHasSetData(SetName))
             {
                 JSONObject jsonObject = Data.getJSONObject(SetName);
-//                FileUnits.writelog("[萌块]BubbleId " + BubbleId + "  " + bubble);
+//                FileUnits.writelog("BubbleId " + BubbleId + "  " + bubble);
                 if (jsonObject.has(ItemName)) return true;
             }
         } catch (JSONException e)
         {
-            FileUnits.writelog("[萌块]" + MethodName + " IfHasItemData\n" + e);
+            FileUnits.writelog("" + MethodName + " IfHasItemData\n" + e);
         }
         return false;
     }
@@ -61,7 +61,7 @@ public class BaseData {
             }
         } catch (JSONException e)
         {
-            FileUnits.writelog("[萌块]" + MethodName + " GetItemData\n" + e);
+            FileUnits.writelog("" + MethodName + " GetItemData\n" + e);
         }
         return null;
     }
@@ -81,7 +81,7 @@ public class BaseData {
             return FileUnits.WriteStringToFile(FileName, Data.toString(), false);
         } catch (JSONException e)
         {
-            FileUnits.writelog("[萌块]" + MethodName + " SetItemData\n" + e);
+            FileUnits.writelog("" + MethodName + " SetItemData\n" + e);
         }
         return false;
     }
@@ -103,7 +103,7 @@ public class BaseData {
             return FileUnits.WriteStringToFile(FileName, Data.toString(), false);
         } catch (JSONException e)
         {
-            FileUnits.writelog("[萌块]" + MethodName + " SetItemData\n" + e);
+            FileUnits.writelog("" + MethodName + " SetItemData\n" + e);
         }
         return false;
     }
@@ -117,7 +117,7 @@ public class BaseData {
             return FileUnits.WriteStringToFile(FileName, Data.toString(), false);
         } catch (JSONException e)
         {
-            FileUnits.writelog("[萌块]" + MethodName + " SetItemData\n" + e);
+            FileUnits.writelog("" + MethodName + " SetItemData\n" + e);
         }
         return false;
     }

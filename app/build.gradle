@@ -10,14 +10,14 @@ println("" +keyPropsFile + keyPropsFile.exists() + keyProps['storeFile'])
 
 
 android {
-    compileSdk 31
+    compileSdk 32
 
     defaultConfig {
         applicationId "com.bwmx.tool"
         minSdk 27
-        targetSdk 30
-        versionCode 20
-        versionName "3.0"
+        targetSdk 32
+        versionCode 33
+        versionName "3.1"
     }
 
     signingConfigs {
@@ -29,10 +29,13 @@ android {
         }
     }
 
+
     dependencies {
-        implementation 'androidx.annotation:annotation:1.2.0'
+
+        compileOnly 'androidx.annotation:annotation:1.3.0'
         compileOnly 'de.robv.android.xposed:api:82'
-        compileOnly 'de.robv.android.xposed:api:82:sources'
+//        compileOnly 'de.robv.android.xposed:api:82:sources'
+
     }
 
     buildTypes {
@@ -43,4 +46,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+
 }

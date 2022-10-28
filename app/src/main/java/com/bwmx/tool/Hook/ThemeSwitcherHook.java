@@ -15,11 +15,11 @@ public class ThemeSwitcherHook {
     public static void Hook() {
         Method MethodIfExists1 = MethodFinder.GetMethod("ThemeHandler", "startSwitch");
         if (MethodIfExists1 != null) {
-//                FileUnits.writelog("[萌块]StructMsgFactory OK");
+//                FileUnits.writelog("StructMsgFactory OK");
             XposedBridge.hookMethod(MethodIfExists1, new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
-                    FileUnits.writelog("[萌块]ThemeSwitcherHook ThemeHandler Stop Change To " + param.args[0]);
+                    FileUnits.writelog("ThemeSwitcherHook ThemeHandler Stop Change To " + param.args[0]);
                     return null;
                 }
             });
@@ -27,11 +27,11 @@ public class ThemeSwitcherHook {
 
         Method MethodIfExists2 = MethodFinder.GetMethod("NormalNightModeHandler", "startSwitch");
         if (MethodIfExists2 != null) {
-//                FileUnits.writelog("[萌块]StructMsgFactory OK");
+//                FileUnits.writelog("StructMsgFactory OK");
             XposedBridge.hookMethod(MethodIfExists2, new XC_MethodReplacement() {
                 @Override
                 protected Object replaceHookedMethod(MethodHookParam param) {
-                    FileUnits.writelog("[萌块]ThemeSwitcherHook NormalNightModeHandler Stop Change To " + param.args[0]);
+                    FileUnits.writelog("ThemeSwitcherHook NormalNightModeHandler Stop Change To " + param.args[0]);
                     return null;
                 }
             });

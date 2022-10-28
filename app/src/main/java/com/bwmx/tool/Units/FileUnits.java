@@ -22,10 +22,14 @@ public class FileUnits {
         File sdCardFile = Environment.getExternalStorageDirectory();
         File file = new File(sdCardFile, "/BWMX/");
         Path = file.getAbsolutePath();
+        File file2 = new File(file, "log.txt");
+        if (file2.exists() && file2.length() > 102400) {
+            boolean delete = file2.delete();
+        }
     }
 
     public static boolean writelog(String data) {
-        XposedBridge.log(data);
+        XposedBridge.log("[萌块]" + data);
         try {
             File file = new File(Path, "log.txt");
             AtomicBoolean create = new AtomicBoolean(true);
@@ -67,7 +71,7 @@ public class FileUnits {
             return sb.toString();
         }
         catch (IOException e) {
-            writelog("[萌块]FileUnits -> ReadObjectFromFile\n" + e);
+            writelog("FileUnits -> ReadObjectFromFile\n" + e);
         }
         return null;
     }
@@ -92,7 +96,7 @@ public class FileUnits {
             }
         }
         catch (IOException e){
-            writelog("[萌块]FileUnits -> ReadObjectFromFile\n" + e);
+            writelog("FileUnits -> ReadObjectFromFile\n" + e);
         }
         return false;
     }
@@ -113,7 +117,7 @@ public class FileUnits {
             return in.readObject();
         }
         catch (ClassNotFoundException | IOException e) {
-            writelog("[萌块]FileUnits -> ReadObjectFromFile\n" + e);
+            writelog("FileUnits -> ReadObjectFromFile\n" + e);
         }
         return null;
     }
@@ -141,7 +145,7 @@ public class FileUnits {
             }
         }
         catch (IOException e) {
-            writelog("[萌块]FileUnits -> WriteObjectToFile\n" + e);
+            writelog("FileUnits -> WriteObjectToFile\n" + e);
         }
         return false;
     }

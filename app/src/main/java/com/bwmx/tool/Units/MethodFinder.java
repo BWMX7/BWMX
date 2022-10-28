@@ -44,21 +44,21 @@ public class MethodFinder {
 
     public static Class<?> FindClass(String className)
     {
-//        FileUnits.writelog("[萌块]FindClass " + className);
+//        FileUnits.writelog("FindClass " + className);
         Class<?> classIfExists = XposedHelpers.findClassIfExists(className, Main.mLoader);
         if (classIfExists != null) return classIfExists;
-        else FileUnits.writelog("[萌块]Class " + className +  " found error!");
+        else FileUnits.writelog("Class " + className +  " found error!");
         return null;
     }
 
     public static Method FindMethod(Class<?> classes, String methodName, Object... obj)
     {
-//        FileUnits.writelog("[萌块]FindMethod " + methodName + "" + Arrays.toString(obj) + " from " + classes);
+//        FileUnits.writelog("FindMethod " + methodName + "" + Arrays.toString(obj) + " from " + classes);
         if (classes != null) {
             Method method = XposedHelpers.findMethodExactIfExists(classes, methodName, obj);
-            if (method != null) FileUnits.writelog("[萌块]Method " + method.toGenericString() + " found ok!");
+            if (method != null) FileUnits.writelog("Method " + method.toGenericString() + " found ok!");
             else {
-                FileUnits.writelog("[萌块]Method " + classes + "→" + methodName + " found error!");
+                FileUnits.writelog("Method " + classes + "→" + methodName + " found error!");
             }
             return method;
         }
@@ -67,7 +67,7 @@ public class MethodFinder {
 
     public static Class<?> FindMyClass(String name)
     {
-//        FileUnits.writelog("[萌块]FindMyClass " + name);
+//        FileUnits.writelog("FindMyClass " + name);
         int QQ_version= HostInfo.getVerCode();
         switch (name) {
             case "QFixApplication": {
@@ -235,7 +235,7 @@ public class MethodFinder {
     {
         Class<?> classes = GetClass(classname);
         if (classes == null) return null;
-//        FileUnits.writelog("[萌块]FindMyMethod " + methodname + " from " + classes);
+//        FileUnits.writelog("FindMyMethod " + methodname + " from " + classes);
         int QQ_version=HostInfo.getVerCode();
         switch (classname + "." + methodname) {
             case "QFixApplication.attachBaseContext": {
@@ -362,7 +362,7 @@ public class MethodFinder {
     public static Method GetMethod(String classname, String methodname)
     {
         String name = classname + "." + methodname;
-//        FileUnits.writelog("[萌块]MethodFinder " + MethodMap);
+//        FileUnits.writelog("MethodFinder " + MethodMap);
         boolean ContainsClassKey= MethodMap.containsKey(name);
         if (ContainsClassKey) return MethodMap.get(name);
         else {
@@ -374,7 +374,7 @@ public class MethodFinder {
 
     public static Object QRoteApi(String classname)
     {
-        Class classIfExists = GetClass("QRoute");
+        Class<?> classIfExists = GetClass("QRoute");
         if (classIfExists == null) return null;
         return XposedHelpers.callStaticMethod(classIfExists, "api", GetClass(classname));
     }

@@ -2,15 +2,12 @@ package com.bwmx.tool.Hook;
 
 import android.view.View;
 
-import com.bwmx.tool.Units.FileUnits;
 import com.bwmx.tool.Units.MethodFinder;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
@@ -35,7 +32,7 @@ public class VipColorNickHook {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     super.afterHookedMethod(param);
-//                        FileUnits.writelog("[萌块]VipColorNickHook VipData " + param);
+//                        FileUnits.writelog("VipColorNickHook VipData " + param);
 //                        int id = (int) param.getResult();
 //                        if (id <= 1)
                     param.setResult(2);

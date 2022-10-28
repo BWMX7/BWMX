@@ -18,14 +18,14 @@ public class AddPluginToolHook {
 //        if (MethodIfExists1 != null) {
 //            try {
 //                Object o = XposedHelpers.callStaticMethod(MethodIfExists1.getDeclaringClass(), MethodIfExists1.getName(), 779412117,  SignatureData.getInstance());
-//                FileUnits.writelog("[萌块]AddClassHook " + o);
+//                FileUnits.writelog("AddClassHook " + o);
 //            } catch (Throwable e) {
-//                FileUnits.writelog("[萌块]AddClassHook Error\n" + e);
+//                FileUnits.writelog("AddClassHook Error\n" + e);
 //            }
 //        }
         Method MethodIfExists2 = MethodFinder.GetMethod("QQAppInterface", "unitTestLog");
         if (MethodIfExists2 != null) {
-//                FileUnits.writelog("[萌块]StructMsgFactory OK");
+//                FileUnits.writelog("StructMsgFactory OK");
             XposedBridge.hookMethod(MethodIfExists2, new XC_MethodHook() {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -33,7 +33,7 @@ public class AddPluginToolHook {
                     String name = (String) param.args[0];
                     Object[] objArr = (Object[]) param.args[1];
                     Object[] obj = new Object[2];
-//                    FileUnits.writelog("[萌块]AddClassHook \n" + name);
+//                    FileUnits.writelog("AddClassHook \n" + name);
                     switch (name) {
                         case "CheckLoad":
                             obj[0] = true;
@@ -52,13 +52,13 @@ public class AddPluginToolHook {
                             }
                             break;
                         case "ChangeStopScroller":
-                            obj[0] = MsgListScrollerHook.ChangeStopScroller((Boolean) objArr[0]);
+                            obj[0] = MsgListScrollerHook.ChangeSwitch((Boolean) objArr[0]);
                             break;
                         default:
                             return;
                     }
-                    FileUnits.writelog("[萌块]AddClassHook " + name + "\n" + Arrays.toString(objArr));
-//                    FileUnits.writelog("[萌块]AddClassHook \n" + objs[0]);
+                    FileUnits.writelog("AddClassHook " + name + "\n" + Arrays.toString(objArr));
+//                    FileUnits.writelog("AddClassHook \n" + objs[0]);
                     param.setResult(obj);
                 }
             });
