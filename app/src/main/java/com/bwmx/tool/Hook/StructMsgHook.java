@@ -47,6 +47,7 @@ public class StructMsgHook {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) {
                     APKData.APP app = SignatureCheckHook.APK.RandomApp(-1);
+                    if (app == null) return;
                     Bundle bundle = (Bundle) param.args[0];
                     bundle.remove("req_share_id");
                     bundle.remove("req_pkg_name");
