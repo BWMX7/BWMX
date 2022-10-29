@@ -82,6 +82,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                         }
                         AddPluginToolHook.Hook();
                         ThemeSwitcherHook.Hook();
+                        StructMsgHook.Hook();
 //                        VipColorNickHook.Hook();
 
                         Method MethodIfExists2 = MethodFinder.GetMethod("HelperProvider", "init");
@@ -91,7 +92,6 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                 @Override
                                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                                     super.afterHookedMethod(param);
-                                    StructMsgHook.Hook();
                                     SignatureCheckHook.Init1();
                                     MiniAppLogin.Hook();
                                     TroopMemberListHook.Hook();

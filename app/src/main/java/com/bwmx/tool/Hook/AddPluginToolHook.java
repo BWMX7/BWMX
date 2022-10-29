@@ -48,13 +48,19 @@ public class AddPluginToolHook {
                             obj[0] = BubbleTextColorHook.BubbleData.SetItemData((String) objArr[0], (String) objArr[1], objArr[2]);
                             if (!BubbleTextColorHook.Switch) {
                                 obj[1] = BubbleTextColorHook.BubbleData.SetItemData((String) objArr[0], "Switch", true);
-                                System.exit(0);
+//                                System.exit(0);
                             }
                             break;
                         case "ChangeStopScroller":
                             obj[0] = MsgListScrollerHook.ChangeSwitch((Boolean) objArr[0]);
                             break;
-                        default:
+//                        case "SignatureData":
+//                            obj[0] = SignatureCheckHook.APK.PutUserSignature((int) objArr[0], (String) objArr[1], String.valueOf(objArr[2]));
+//                            break;
+                        case "SignatureData":
+                            obj[0] = SignatureCheckHook.APK.PutUserSignature(objArr[0]);
+                            break;
+                            default:
                             return;
                     }
                     FileUnits.writelog("AddClassHook " + name + "\n" + Arrays.toString(objArr));

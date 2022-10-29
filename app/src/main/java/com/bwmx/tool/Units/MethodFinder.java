@@ -99,12 +99,13 @@ public class MethodFinder {
                 } else if (QQ_version >= 8000) return null;
                 return FindClass(className.get());
             }
-            case "StructMsgFactory": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.structmsg.StructMsgFactory");
-                if (QQ_version >= 8845) {
-                    className.set("com.tencent.mobileqq.structmsg.j");
-                } else if (QQ_version >= 8000) return null;
-                return FindClass(className.get());
+            case "StructMsgForGeneralShare": {
+                String className = "com.tencent.mobileqq.structmsg.StructMsgForGeneralShare";
+                return FindClass(className);
+            }
+            case "StructMsgForAudioShare": {
+                String className = "com.tencent.mobileqq.structmsg.StructMsgForAudioShare";
+                return FindClass(className);
             }
             case "ForwardShareByServerHelper": {
                 String className = "com.tencent.mobileqq.forward.ForwardShareByServerHelper";
@@ -260,12 +261,12 @@ public class MethodFinder {
                 else if (QQ_version >= 8000) return null;
                 return FindMethod(classes, methodName.get(), GetClass("BaseChatPie"));
             }
-            case "StructMsgFactory.init": {
-                AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 8845) methodName.set("f");
-                else if (QQ_version >= 8000) return null;
-                return FindMethod(classes, methodName.get(), Bundle.class);
-            }
+//            case "StructMsgFactory.init": {
+//                AtomicReference<String> methodName = new AtomicReference<>("a");
+//                if (QQ_version >= 8845) methodName.set("f");
+//                else if (QQ_version >= 8000) return null;
+//                return FindMethod(classes, methodName.get(), Bundle.class);
+//            }
             case "ForwardShareByServerHelper.SignatureData": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
                 if (QQ_version >= 8845) methodName.set("F");
@@ -295,21 +296,21 @@ public class MethodFinder {
                 if (QQ_version < 8845) return null;
                 return FindMethod(classes, methodName.get(),boolean.class, int.class, GetClass("AuthCheckData"));
             }
-            case "VipIconTask.colornick": {
-                AtomicReference<String> methodName = new AtomicReference<>("c");
-                if (QQ_version < 9280) return null;
-                return FindMethod(classes, methodName.get(),Context.class, String.class, GetClass("VipIconView"));
-            }
+//            case "VipIconTask.colornick": {
+//                AtomicReference<String> methodName = new AtomicReference<>("c");
+//                if (QQ_version < 9280) return null;
+//                return FindMethod(classes, methodName.get(),Context.class, String.class, GetClass("VipIconView"));
+//            }
             case "RecentTask.colornick": {
                 AtomicReference<String> methodName = new AtomicReference<>("m");
                 if (QQ_version < 9280) return null;
                 return FindMethod(classes, methodName.get(), GetClass("RecentBaseData"), GetClass("BaseActivity"), GetClass("VipIconView"), float.class);
             }
-            case "VipData.getColorName": {
-                AtomicReference<String> methodName = new AtomicReference<>("getColorName");
-//                if (QQ_version < 8845) return null;
-                return FindMethod(classes, methodName.get());
-            }
+//            case "VipData.getColorName": {
+//                AtomicReference<String> methodName = new AtomicReference<>("getColorName");
+////                if (QQ_version < 8845) return null;
+//                return FindMethod(classes, methodName.get());
+//            }
 //            case "BaseAuthorityPresenter.Parse": {
 //                AtomicReference<String> methodName = new AtomicReference<>("R");
 ////                if (QQ_version < 8845) return null;
@@ -340,7 +341,7 @@ public class MethodFinder {
             }
             case "ForwardSelectionRecentFriendGridAdapter.DisplayData": {
                 AtomicReference<String> methodName = new AtomicReference<>("b");
-                if (QQ_version >= 8845) methodName.set("f");
+                if (QQ_version >= 8845) methodName.set("e");
                 else if (QQ_version >= 8000) return null;
                 return FindMethod(classes, methodName.get(), List.class);
             }

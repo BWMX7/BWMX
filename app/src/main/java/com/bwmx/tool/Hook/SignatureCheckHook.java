@@ -85,13 +85,13 @@ public class SignatureCheckHook extends BaseHook{
     public static void Init1()
     {
         Log(" -> ForwardShareCard HookInit");
-        Log(String.valueOf(Hook1()));
+        Log("ForwardShareCard" + Hook1());
     }
 
     public static void Init2()
     {
         Log(" -> VirtualLogin HookInit");
-        Log(String.valueOf(Hook2()));
+        Log("VirtualLogin" +Hook2());
     }
 
     private static void Log(String log)
