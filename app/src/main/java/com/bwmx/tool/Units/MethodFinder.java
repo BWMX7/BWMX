@@ -223,6 +223,17 @@ public class MethodFinder {
                 String className = "com.tencent.mobileqq.adapter.ForwardSelectionRecentFriendGridAdapter";
                 return FindClass(className);
             }
+            case "GetStrangerVasInfoHandler": {
+                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.vas.handler.GetStrangerVasInfoHandler");
+                if (QQ_version >= 8845) {
+                    className.set("com.tencent.mobileqq.vas.e.a");
+                } else if (QQ_version >= 8000) return null;
+                return FindClass(className.get());
+            }
+            case "oidb_0x5eb$UdcUinData": {
+                String className = "tencent.im.oidb.cmd0x5eb.oidb_0x5eb$UdcUinData";
+                return FindClass(className);
+            }
 //            case "BaseAuthorityPresenter": {
 //                AtomicReference<String> className = new AtomicReference<>("com.tencent.open.agent.auth.presenter.BaseAuthorityPresenter");
 //                return FindClass(className.get());
@@ -323,7 +334,7 @@ public class MethodFinder {
                 if (QQ_version < 8845) return null;
                 return FindMethod(classes, methodName.get(), GetClass("BaseBubbleBuilder$d"), View.class, GetClass("ChatMessage"), GetClass("BubbleInfo"));
             }
-            case "ThemeHandler.startSwitch": {
+            case "ThemeHandler.SwitchTheme": {
                 AtomicReference<String> methodName = new AtomicReference<>("b");
                 if (QQ_version >= 9425) methodName.set("d5");
                 else if (QQ_version >= 9280) methodName.set("g5");
@@ -331,7 +342,7 @@ public class MethodFinder {
                 else if (QQ_version >= 8000) return null;
                 return FindMethod(classes, methodName.get(), String.class, String.class);
             }
-            case "NormalNightModeHandler.startSwitch": {
+            case "NormalNightModeHandler.SwitchTheme": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
                 if (QQ_version >= 9425) methodName.set("S4");
                 else if (QQ_version >= 9280) methodName.set("V4");
@@ -344,6 +355,12 @@ public class MethodFinder {
                 if (QQ_version >= 8845) methodName.set("e");
                 else if (QQ_version >= 8000) return null;
                 return FindMethod(classes, methodName.get(), List.class);
+            }
+            case "GetStrangerVasInfoHandler.SwitchBubble": {
+                AtomicReference<String> methodName = new AtomicReference<>("a");
+                if (QQ_version >= 8845) methodName.set("d");
+                else if (QQ_version >= 8000) return null;
+                return FindMethod(classes, methodName.get(), GetClass("oidb_0x5eb$UdcUinData"));
             }
         }
         return null;
