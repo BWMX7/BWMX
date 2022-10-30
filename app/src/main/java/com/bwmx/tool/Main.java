@@ -76,50 +76,53 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                         HostInfo.Init();
                         Log("HostInfo：" + HostInfo.getVersion() + "_" + HostInfo.getVerCode());
 
-                        if (ProcessName.contains("openSdk")) {
-                            SignatureCheckHook.Init2();
-                            return;
-                        }
-                        AddPluginToolHook.Hook();
-                        ThemeSwitcherHook.Hook();
-                        StructMsgHook.Hook();
-//                        VipColorNickHook.Hook();
-
-                        Method MethodIfExists2 = MethodFinder.GetMethod("HelperProvider", "init");
+                        Method MethodIfExists2 = MethodFinder.GetMethod("QQAppInterface", "onCreate");
                         if (MethodIfExists2 != null) {
-                            // writelog("" + MethodIfExists);
                             XposedBridge.hookMethod(MethodIfExists2, new XC_MethodHook() {
                                 @Override
                                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                                     super.afterHookedMethod(param);
+                                    Object runtime = param.thisObject;
+//                        Log("runtime：" + runtime);
+                                    if (runtime != null && !Objects.equals(runtime, Runtime)) {
+                                        Runtime = runtime;
+                                        Log("Runtime：" + Runtime);
+                                        String uin = (String) XposedHelpers.callMethod(Runtime, "getCurrentAccountUin");
+//                        Log("uin：" + uin);
+                                        if (uin != null && uin.length() > 4) MyUin = uin;
+                                        Log("MyUin：" + MyUin);
+                                    }
+                                }
+                            });
+                        }
+
+                        if (ProcessName.contains("openSdk")) {
+                            SignatureCheckHook.Init2();
+                            return;
+                        }
+
+                        AddPluginToolHook.Hook();
+                        ThemeSwitcherHook.Hook();
+                        StructMsgHook.Hook();
+                        ForwardRecentDisplayHook.Hook();
+//                        VipColorNickHook.Hook();
+
+                        Method MethodIfExists3 = MethodFinder.GetMethod("HelperProvider", "init");
+                        if (MethodIfExists3 != null) {
+                            // writelog("" + MethodIfExists);
+                            XposedBridge.hookMethod(MethodIfExists3, new XC_MethodHook() {
+                                @Override
+                                protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                                    super.afterHookedMethod(param);
+
                                     SignatureCheckHook.Init1();
                                     MiniAppLogin.Hook();
                                     TroopMemberListHook.Hook();
                                     MsgListScrollerHook.Init();
-                                    ForwardRecentDisplayHook.Hook();
                                     BubbleTextColorHook.Init();
+
                                 }
                             });
-                        }
-                    }
-                });
-            }
-
-            Method MethodIfExists3 = MethodFinder.GetMethod("QQAppInterface", "onCreate");
-            if (MethodIfExists3 != null) {
-                    XposedBridge.hookMethod(MethodIfExists3, new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        super.afterHookedMethod(param);
-                        Object runtime = param.thisObject;
-//                        Log("runtime：" + runtime);
-                        if (runtime != null && !Objects.equals(runtime, Runtime)) {
-                            Runtime = runtime;
-                            Log("Runtime：" + Runtime);
-                            String uin = (String) XposedHelpers.callMethod(Runtime, "getCurrentAccountUin");
-//                        Log("uin：" + uin);
-                            if (uin != null && uin.length() > 4) MyUin = uin;
-                            Log("MyUin：" + MyUin);
                         }
                     }
                 });

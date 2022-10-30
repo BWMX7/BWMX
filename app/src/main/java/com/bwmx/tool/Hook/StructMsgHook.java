@@ -3,7 +3,6 @@ package com.bwmx.tool.Hook;
 import android.os.Bundle;
 
 import com.bwmx.tool.Units.Data.APKData;
-import com.bwmx.tool.Units.FileUnits;
 import com.bwmx.tool.Units.MethodFinder;
 
 import java.io.IOException;
@@ -17,6 +16,7 @@ public class StructMsgHook {
         Class<?> ClassIfExists1 = MethodFinder.GetClass("StructMsgForGeneralShare");
         Class<?> ClassIfExists2 = MethodFinder.GetClass("StructMsgForAudioShare");
 //        Method MethodIfExists1 = MethodFinder.GetMethod("StructMsgFactory", "init");
+
         if (ClassIfExists1 != null) {
 //                FileUnits.writelog("StructMsgFactory OK");
             XposedHelpers.findAndHookConstructor(ClassIfExists1, Bundle.class, new XC_MethodHook() {
@@ -43,12 +43,19 @@ public class StructMsgHook {
                     }
                 }
             });
+        }
+
+        if (ClassIfExists2 != null) {
             XposedHelpers.findAndHookConstructor(ClassIfExists2, Bundle.class, new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) {
                     APKData.APP app = SignatureCheckHook.APK.RandomApp(-1);
                     if (app == null) return;
                     Bundle bundle = (Bundle) param.args[0];
+//                    long id = bundle.getLong("req_share_id", 0);
+                    boolean change = bundle.getBoolean("needChange", false);
+                    if (!change) return;
+                    bundle.remove("needChange");
                     bundle.remove("req_share_id");
                     bundle.remove("req_pkg_name");
                     bundle.remove("app_name");
