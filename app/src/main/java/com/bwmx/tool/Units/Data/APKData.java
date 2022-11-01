@@ -55,7 +55,7 @@ public class APKData extends BaseData{
             default:
                 qm = null;
         }
-        return qm != null ? qm.toUpperCase(Locale.ROOT) : null;
+        return qm;
     }
 //
 //    public boolean PutUserSignature(int appId,String appName, String name) {
@@ -73,11 +73,11 @@ public class APKData extends BaseData{
 //        return SetItemData(appName, (JSONObject) jsonObject);
 //    }
 
-    public boolean PutUserSignature(Object jsonObject)
+    public boolean PutUserAPK(Object jsonObject)
     {
 //        FileUnits.writelog("APKData \n" + jsonObject);
         if (jsonObject instanceof JSONObject) {
-            return SetItemData((JSONObject) jsonObject);
+            return SetJSONData((JSONObject) jsonObject , false);
         }
         return false;
     }

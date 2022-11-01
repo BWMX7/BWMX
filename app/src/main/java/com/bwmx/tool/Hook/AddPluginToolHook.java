@@ -57,10 +57,13 @@ public class AddPluginToolHook {
 //                        case "SignatureData":
 //                            obj[0] = SignatureCheckHook.APK.PutUserSignature((int) objArr[0], (String) objArr[1], String.valueOf(objArr[2]));
 //                            break;
-                        case "SignatureData":
-                            obj[0] = SignatureCheckHook.APK.PutUserSignature(objArr[0]);
+                        case "SetAPP":
+                            obj[0] = SignatureCheckHook.APK.PutUserAPK(objArr[0]);
                             break;
-                            default:
+                        case "ChangeRecentUser":
+                            obj[0] = ForwardRecentDisplayHook.recentUserData.ChangeRecentUser((String) objArr[0], (Integer) objArr[1]);
+                            break;
+                        default:
                             return;
                     }
                     FileUnits.writelog("AddClassHook " + name + "\n" + Arrays.toString(objArr));

@@ -41,19 +41,16 @@ public class RecentUserData extends BaseData
         return SelfUser;
     }
 
-    public ArrayList<Object> ReadData()
+    private ArrayList<Object> ReadData()
     {
         ArrayList<Object> arrayList = new ArrayList<>();
 
         for (Iterator<String> it = Data.keys(); it.hasNext(); ) {
             String Uin = it.next();
-            try {
-                JSONObject jsonObject = Data.getJSONObject(Uin);
-//                String Uin = jsonObject.optString("Uin");
-                int UinType = jsonObject.optInt("UinType");
+            Integer UinType = (Integer) GetItemData(Uin, "UinType");
+            if (UinType != null) {
                 Object RecentUser = NewUser(Uin, UinType);
                 arrayList.add(RecentUser);
-            } catch (JSONException ignored) {
             }
         }
 //        arrayList.add(SelfUser);
@@ -68,5 +65,25 @@ public class RecentUserData extends BaseData
         }
 //        FileUnits.writelog("RecentUserData " + RecentUserList);
         return new ArrayList<>(RecentUserList);
+    }
+
+    public boolean AddNRecentUser(String Uin, Integer UinType)
+    {
+        boolean ok = SetItemData(Uin, "UinType", UinType);
+        if (ok) RecentUserList = null;
+        return ok;
+    }
+
+    public boolean RemoveRecentUser(String Uin, Integer UinType)
+    {
+        boolean ok = SetJSONData(Uin, null, true);
+        if (ok) RecentUserList = null;
+        return ok;
+    }
+
+    public String ChangeRecentUser(String Uin, Integer UinType)
+    {
+        if (IfHasItemData(Uin, "UinType")) return RemoveRecentUser(Uin, UinType) ? "已从最近转发列表删除" : "从最近转发列表删除失败";
+        else  return AddNRecentUser(Uin, UinType)  ? "已添加到最近转发列表" : "添加到最近转发列表失败";
     }
 }

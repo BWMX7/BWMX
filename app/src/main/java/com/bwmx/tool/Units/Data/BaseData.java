@@ -85,13 +85,12 @@ public class BaseData {
         }
         return false;
     }
-    public boolean SetItemData(String SetName, JSONObject data) {
+    public boolean SetJSONData(String SetName, JSONObject data, boolean replace) {
         try {
             JSONObject jsonObject;
-            if (IfHasSetData(SetName))
+            if (!replace && IfHasSetData(SetName))
             {
                 jsonObject = Data.getJSONObject(SetName);
-                Data.remove(SetName);
                 for (Iterator<String> it = data.keys(); it.hasNext(); ) {
                     String key = it.next();
                     jsonObject.put(key, data.get(key));
@@ -108,8 +107,9 @@ public class BaseData {
         return false;
     }
 
-    public boolean SetItemData(JSONObject data) {
+    public boolean SetJSONData(JSONObject data, boolean replace) {
         try {
+            if (replace) Data = new JSONObject();
             for (Iterator<String> it = data.keys(); it.hasNext(); ) {
                 String key = it.next();
                 Data.put(key, data.get(key));
