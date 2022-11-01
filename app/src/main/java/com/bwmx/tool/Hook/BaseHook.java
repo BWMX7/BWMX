@@ -3,6 +3,7 @@ package com.bwmx.tool.Hook;
 
 import android.text.TextUtils;
 
+import com.bwmx.tool.Main;
 import com.bwmx.tool.Units.FileUnits;
 
 import java.lang.reflect.Method;
@@ -52,11 +53,16 @@ public class BaseHook {
         return false;
     }
 
-    public static Boolean ChangeSwitch(Boolean newSwitch, Boolean oldSwitch)
+    public static boolean ChangeSwitch(Boolean newSwitch, Boolean oldSwitch)
     {
         if (newSwitch != null) return newSwitch;
         else if (oldSwitch != null) return !oldSwitch;
-        else return null;
+        else return true;
+    }
+
+    public static boolean PutSwitch(String Name, boolean Switch)
+    {
+        return Main.HookSwitches.PutSwitch(Name, Switch);
     }
 
 }

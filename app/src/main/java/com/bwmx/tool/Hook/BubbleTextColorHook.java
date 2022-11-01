@@ -3,6 +3,7 @@ package com.bwmx.tool.Hook;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bwmx.tool.Main;
 import com.bwmx.tool.Units.Data.ChangeBubbleData;
 import com.bwmx.tool.Units.FileUnits;
 import com.bwmx.tool.Units.MethodFinder;
@@ -17,18 +18,16 @@ public class BubbleTextColorHook extends BaseHook{
     public static ChangeBubbleData BubbleData = new ChangeBubbleData();
 
     public static String HookName = "BubbleTextColorHook";
-    public static Boolean Switch;
+    public static boolean Switch;
 
     private static final XC_MethodHook MethodHook1;
     private static XC_MethodHook.Unhook Unhook1;
     private static XC_MethodHook.Unhook Unhook2;
     private static XC_MethodHook.Unhook Unhook3;
 
-    static {
-        Boolean data = (Boolean) BubbleData.GetItemData("ThemeId_2028656", "Switch");
-        if (data != null) Switch = data;
-        else Switch = false;
-
+    static
+    {
+        Switch = Main.HookSwitches.GetSwitch(HookName);
         MethodHook1 = new XC_MethodHook() {
             @Override
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
@@ -123,9 +122,11 @@ public class BubbleTextColorHook extends BaseHook{
         return HasNull(Unhook1, Unhook2, Unhook3);
     }
 
-    public static Boolean ChangeSwitch(Boolean newSwitch)
+    public static boolean ChangeSwitch(Boolean newSwitch)
     {
-        Switch = ChangeSwitch(newSwitch,Switch);
+        boolean change = ChangeSwitch(newSwitch, Switch);
+        boolean ok = PutSwitch(HookName, change);
+        if (ok) Switch = change;
         if (Switch) return Hook();
         else return !UnHook();
     }

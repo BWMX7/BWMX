@@ -1,6 +1,7 @@
 package com.bwmx.tool.Hook;
 
 
+import com.bwmx.tool.Main;
 import com.bwmx.tool.Units.MethodFinder;
 
 import java.lang.reflect.Field;
@@ -14,21 +15,27 @@ import de.robv.android.xposed.XposedHelpers;
 public class VasSwitcherHook extends BaseHook
 {
     public static String HookName = "VasSwitcherHook";
-    public static Boolean Switch = false;
+    public static Boolean Switch1;
+    public static Boolean Switch2;
 
     private static XC_MethodHook.Unhook Unhook1;
     private static XC_MethodHook.Unhook Unhook2;
     private static XC_MethodHook.Unhook Unhook3;
 
+    static
+    {
+        Switch1 = Main.HookSwitches.GetSwitch("ThemeSwitcher");
+        Switch2 = Main.HookSwitches.GetSwitch("BubbleSwitcher");
+    }
 
     public static void Init1()
     {
-        Log("ThemeSwitcher Hook " + Hook1());
+        if (Switch1) Log("ThemeSwitcher Hook " + Hook1());
     }
 
     public static void Init2()
     {
-        Log("BubbleSwitcher Hook " +Hook2());
+        if (Switch2) Log("BubbleSwitcher Hook " +Hook2());
     }
 
     private static void Log(String log)
@@ -42,7 +49,7 @@ public class VasSwitcherHook extends BaseHook
         Unhook1 = Hook(MethodIfExists1, new XC_MethodReplacement() {
             @Override
             protected Object replaceHookedMethod(MethodHookParam param) {
-                Log("[ThemeSwitcher]ThemeHandler Stop Change To " + param.args[0]);
+                Log("ThemeHandler Stop Change Theme To " + param.args[0]);
                 return null;
             }
         }, Unhook1);
@@ -51,7 +58,7 @@ public class VasSwitcherHook extends BaseHook
         Unhook2 = Hook(MethodIfExists2, new XC_MethodReplacement() {
             @Override
             protected Object replaceHookedMethod(MethodHookParam param) {
-                Log("[ThemeSwitcher]NormalNightModeHandler Stop Change To " + param.args[0]);
+                Log("NormalNightModeHandler Stop Change ThemeMode To " + param.args[0]);
                 return null;
             }
         }, Unhook2);
@@ -72,10 +79,10 @@ public class VasSwitcherHook extends BaseHook
                     boolean has = (boolean) XposedHelpers.callMethod(bubble_id, "has");
                     if (has) {
                         int id = (int) XposedHelpers.callMethod(bubble_id, "get");
-                        Log("[BubbleSwitcher]GetStrangerVasInfoHandler Stop Change To " + id);
+                        Log("GetStrangerVasInfoHandler Stop Change Bubble To " + id);
                     }
                 } catch (IllegalAccessException e) {
-                    Log("[BubbleSwitcher]GetStrangerVasInfoHandler " +e);
+                    Log("GetStrangerVasInfoHandler " +e);
                 }
                 return null;
             }
@@ -92,6 +99,24 @@ public class VasSwitcherHook extends BaseHook
     private static Boolean UnHook2() {
         Unhook3 = UnHook(Unhook3);
         return HasNull(Unhook3);
+    }
+
+    public static boolean ChangeSwitch1(Boolean newSwitch)
+    {
+        boolean change = ChangeSwitch(newSwitch, Switch1);
+        boolean ok = PutSwitch("ThemeSwitcher", change);
+        if (ok) Switch1 = change;
+        if (Switch1) return Hook1();
+        else return !UnHook1();
+    }
+
+    public static boolean ChangeSwitch2(Boolean newSwitch)
+    {
+        boolean change = ChangeSwitch(newSwitch, Switch2);
+        boolean ok = PutSwitch("BubbleSwitcher", change);
+        if (ok) Switch2 = change;
+        if (Switch2) return Hook2();
+        else return !UnHook2();
     }
 
 }

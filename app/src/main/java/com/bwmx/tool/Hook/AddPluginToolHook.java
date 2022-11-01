@@ -65,7 +65,7 @@ public class AddPluginToolHook extends BaseHook{
             case "SetNewColor":
                 obj[0] = BubbleTextColorHook.BubbleData.SetItemData((String) objArr[0], (String) objArr[1], objArr[2]);
                 if (!BubbleTextColorHook.Switch) {
-                    obj[1] = BubbleTextColorHook.BubbleData.SetItemData((String) objArr[0], "Switch", true);
+                    obj[1] = BubbleTextColorHook.ChangeSwitch(true);
                 }
                 break;
             case "ChangeStopScroller":
@@ -76,6 +76,18 @@ public class AddPluginToolHook extends BaseHook{
                 break;
             case "ChangeRecentUser":
                 obj[0] = ForwardRecentDisplayHook.recentUserData.ChangeRecentUser((String) objArr[0], (Integer) objArr[1]);
+                break;
+            case "ThemeHook":
+                Boolean change = (Boolean) objArr[0];
+                if (change == null) obj[0] = VasSwitcherHook.ChangeSwitch1(null);
+                else if (change && !VasSwitcherHook.Switch1) obj[0] = VasSwitcherHook.ChangeSwitch1(true);
+                else if (!change && VasSwitcherHook.Switch1) obj[0] = VasSwitcherHook.ChangeSwitch1(false);
+                break;
+            case "BubbleHook":
+                change = (Boolean) objArr[0];
+                if (change == null) obj[0] = VasSwitcherHook.ChangeSwitch2(null);
+                else if (change && !VasSwitcherHook.Switch2) obj[0] = VasSwitcherHook.ChangeSwitch2(true);
+                else if (!change && VasSwitcherHook.Switch2) obj[0] = VasSwitcherHook.ChangeSwitch2(false);
                 break;
             default:
                 return objArr;

@@ -23,16 +23,21 @@ public class BaseData {
         FileUnits.writelog("" + MethodName + " Init -> " + FileName);
         String json = FileUnits.ReadStringFromFile(FileName);
         if (json != null) Data = new JSONObject(json);
+//        else  SetJSONData(Data, true);
         } catch (JSONException e) {
             FileUnits.writelog("" + MethodName + " Init\n" + e);
         }
-        if (Data == null) Data = new JSONObject();
+        if (Data == null) {
+            Data = new JSONObject();
 //        FileUnits.writelog("" + MethodName + " Init -> " + this);
+        }
     }
 
     public boolean IfHasSetData(String SetName)
     {
-        return Data.has(SetName);
+        boolean has = Data.has(SetName);
+        if (!has) SetJSONData(SetName, new JSONObject(), true);
+        return true;
     }
 
     public boolean IfHasItemData(String SetName, String ItemName)
@@ -98,7 +103,7 @@ public class BaseData {
             }
             else jsonObject = data;
             Data.remove(SetName);
-            if (jsonObject != null && jsonObject.length() > 0) Data.put(SetName, jsonObject);
+            Data.put(SetName, jsonObject);
             return FileUnits.WriteStringToFile(FileName, Data.toString(), false);
         } catch (JSONException e)
         {
@@ -110,9 +115,12 @@ public class BaseData {
     public boolean SetJSONData(JSONObject data, boolean replace) {
         try {
             if (replace) Data = new JSONObject();
-            for (Iterator<String> it = data.keys(); it.hasNext(); ) {
-                String key = it.next();
-                Data.put(key, data.get(key));
+            if (data != null)
+            {
+                for (Iterator<String> it = data.keys(); it.hasNext(); ) {
+                    String key = it.next();
+                    Data.put(key, data.get(key));
+                }
             }
             return FileUnits.WriteStringToFile(FileName, Data.toString(), false);
         } catch (JSONException e)
