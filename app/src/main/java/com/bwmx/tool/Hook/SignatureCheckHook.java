@@ -45,7 +45,7 @@ public class SignatureCheckHook extends BaseHook{
 //                    String md5 = strArr[1];
                 String time = strArr[2];
                 Log("VirtualCheck local -> " + pkgname + " : " + qm);
-                String qm2 = APK.GetSignature(pkgname);
+                String qm2 = APK.GetSignature(pkgname).toLowerCase(Locale.ROOT);
                 Log("VirtualCheck replace -> " + pkgname + " : " + qm2);
                 if (qm != null && !qm2.contains(qm)) {
                     StringBuilder sb = new StringBuilder();
@@ -78,6 +78,7 @@ public class SignatureCheckHook extends BaseHook{
                 int id = (int) param.args[1];
                 Log("AuthCheck -> " + check + " : " + id);
                 param.args[0] = true;
+                param.args[1] = 0;
             }
         };
     }
