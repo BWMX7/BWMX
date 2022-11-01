@@ -42,7 +42,7 @@ public class FileUnits {
         }
     }
 
-    public static boolean writelog(String log) {
+    public synchronized static boolean writelog(String log) {
         String log2 = "[" + Main.ProcessName + "]" + log;
         XposedBridge.log("[萌块]" + log2);
         String data = "[" + GetNowTime("MM-dd HH:mm:ss.SS") + "]" + log2;
@@ -72,7 +72,7 @@ public class FileUnits {
         else return ReadStringFromFile(new File(Path, filepath));
     }
 
-    public static String ReadStringFromFile(File file)
+    public synchronized static String ReadStringFromFile(File file)
     {
         try{
             if(!file.exists()) return null;
@@ -89,7 +89,7 @@ public class FileUnits {
         catch (IOException e) {
             writelog("FileUnits -> ReadObjectFromFile\n" + e);
         }
-        return null;
+        return "";
     }
 
     public static boolean WriteStringToFile(String filepath, String data, boolean append) {
@@ -98,7 +98,7 @@ public class FileUnits {
             else return WriteStringToFile(new File(Path, filepath), data, append);
         }
 
-    public static boolean WriteStringToFile(File file, String data, boolean append) {
+    public synchronized static boolean WriteStringToFile(File file, String data, boolean append) {
         try {
             AtomicBoolean create = new AtomicBoolean(true);
             if(!Objects.requireNonNull(file.getParentFile()).exists()) create.set(file.getParentFile().mkdirs());
@@ -124,7 +124,7 @@ public class FileUnits {
         else return ReadObjectFromFile(new File(Path, filepath));
     }
 
-    public static Object ReadObjectFromFile(File file)
+    public synchronized static Object ReadObjectFromFile(File file)
     {
         try{
             if(!file.exists()) return null;
@@ -144,7 +144,7 @@ public class FileUnits {
         else return WriteObjectToFile(new File(Path, filepath), data);
     }
 
-    public static boolean WriteObjectToFile(File file,Object WriteData)
+    public synchronized static boolean WriteObjectToFile(File file,Object WriteData)
     {
         try{
             AtomicBoolean create = new AtomicBoolean(true);
