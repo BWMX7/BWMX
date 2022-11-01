@@ -89,7 +89,7 @@ public class SignatureCheckHook extends BaseHook{
 
     public static void Init2()
     {
-        Log("VirtualLogin Hook " +Hook2());
+        Log("VirtualLogin Hook " + Hook2());
     }
 
     private static void Log(String log)

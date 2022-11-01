@@ -41,8 +41,9 @@ public class BaseHook {
         }
     }
 
-    public static Boolean HasNull(XC_MethodHook.Unhook... unhooks)
+    public static boolean HasNull(XC_MethodHook.Unhook... unhooks)
     {
+        if (unhooks == null) return true;
         for (XC_MethodHook.Unhook unhook : unhooks)
         {
             if (unhook == null) return true;

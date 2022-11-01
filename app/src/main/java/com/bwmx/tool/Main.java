@@ -57,7 +57,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
             String processName = loadPackageParam.processName.replace("com.tencent.mobileqq", "QQ");
 //            if (!processName.equals("")) return;
             if (!processName.equals("QQ")) ProcessName = processName;
-            if (!ProcessName.contains("Main")&&!ProcessName.contains("openSdk")) return;
+            if (!ProcessName.contains("Main") && !ProcessName.contains("openSdk")) return;
             Log("-> Load QQ");
 //            if (mLoader == null)
             mLoader = loadPackageParam.classLoader;
@@ -102,7 +102,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                         }
 
                         AddPluginToolHook.Init();
-                        VasSwitcherHook.Hook();
+                        VasSwitcherHook.Init1();
                         StructMsgHook.Hook();
                         ForwardRecentDisplayHook.Hook();
 //                        VipColorNickHook.Hook();
@@ -119,6 +119,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                     MiniAppLogin.Hook();
                                     TroopMemberListHook.Hook();
                                     MsgListScrollerHook.Init();
+                                    VasSwitcherHook.Init2();
                                     BubbleTextColorHook.Init();
 
                                 }
