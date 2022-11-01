@@ -45,11 +45,12 @@ public class ForwardRecentDisplayHook {
                     Iterator<?> it = RecentUserList.iterator();
                     while (it.hasNext()) {
                         Object RecentUser = it.next();
-                        if (RecentUser.getClass().equals(recentUserData.RecentUserClass))
+                        Class<?> classes = recentUserData.RecentUserClass;
+                        if (RecentUser.getClass().equals(classes))
                         {
-                            Field field1 = XposedHelpers.findField(recentUserData.RecentUserClass, "type");
+                            Field field1 = XposedHelpers.findField(classes, "type");
                             int type = (int) field1.get(RecentUser);
-                            Field field2 = XposedHelpers.findField(recentUserData.RecentUserClass, "uin");
+                            Field field2 = XposedHelpers.findField(classes, "uin");
                             String uin = (String) field2.get(RecentUser);
                             if (hashMap.containsKey(uin))
                             {

@@ -93,17 +93,17 @@ public class BubbleTextColorHook extends BaseHook{
                 }
             }
         };
-        if (Switch) Hook();
     }
 
     public static void Init()
     {
-        Log(" -> HookInit");
+        Log("HookInit");
+        if (Switch) Log("Hook " + Hook());
     }
 
     private static void Log(String log)
     {
-        FileUnits.writelog("[" + HookName + "]" + log);
+        Log(HookName, log);
     }
 
     public static Boolean Hook() {

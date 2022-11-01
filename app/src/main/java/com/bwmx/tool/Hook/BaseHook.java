@@ -1,10 +1,11 @@
 package com.bwmx.tool.Hook;
 
 
+import android.text.TextUtils;
+
 import com.bwmx.tool.Units.FileUnits;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -17,10 +18,10 @@ public class BaseHook {
 //    protected static XC_MethodHook.Unhook Unhook1;
 
 
-
-    private static void Log(String log)
+    public static void Log(String Name,String log)
     {
-        FileUnits.writelog("[" + HookName + "]" + log);
+        if (TextUtils.isEmpty(Name)) FileUnits.writelog("[" + HookName + "] " + log);
+        else FileUnits.writelog("[" + Name + "] " + log);
     }
 
     public static XC_MethodHook.Unhook Hook(Method method,XC_MethodHook methodHook, XC_MethodHook.Unhook unhook)

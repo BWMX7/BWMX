@@ -48,7 +48,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
 
     public static void Log(String log)
     {
-        FileUnits.writelog("[" + HookName + "] " + log);
+        Log(HookName, log);
     }
 
     public void handleLoadPackage(@NonNull XC_LoadPackage.LoadPackageParam loadPackageParam) {
@@ -101,7 +101,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                             return;
                         }
 
-                        AddPluginToolHook.Hook();
+                        AddPluginToolHook.Init();
                         VasSwitcherHook.Hook();
                         StructMsgHook.Hook();
                         ForwardRecentDisplayHook.Hook();

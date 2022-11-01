@@ -84,19 +84,17 @@ public class SignatureCheckHook extends BaseHook{
 
     public static void Init1()
     {
-        Log(" -> ForwardShareCard HookInit");
-        Log("ForwardShareCard" + Hook1());
+        Log("ForwardShareCard Hook " + Hook1());
     }
 
     public static void Init2()
     {
-        Log(" -> VirtualLogin HookInit");
-        Log("VirtualLogin" +Hook2());
+        Log("VirtualLogin Hook " +Hook2());
     }
 
     private static void Log(String log)
     {
-        FileUnits.writelog("[" + HookName + "]" + log);
+        Log(HookName, log);
     }
 
     private static Boolean Hook1() {

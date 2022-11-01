@@ -45,8 +45,9 @@ public class MsgListScrollerHook extends BaseHook{
 //        ChangeSwitch(true);
     }
 
-    private static void Log(String log) {
-        FileUnits.writelog("[" + HookName + "]" + log);
+    private static void Log(String log)
+    {
+        Log(HookName, log);
     }
 
     private static Boolean Hook() {
