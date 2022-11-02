@@ -17,8 +17,8 @@ public class BaseHook {
 
     public static void Log(String Name,String log)
     {
-        if (TextUtils.isEmpty(Name)) FileUnits.writelog("[" + HookName + "] " + log);
-        else FileUnits.writelog("[" + Name + "] " + log);
+        if (TextUtils.isEmpty(Name)) FileUnits.writelog("[" + HookName + "]" + log);
+        else FileUnits.writelog("[" + Name + "]" + log);
     }
 
     public static void LogStackTrace(String Name)

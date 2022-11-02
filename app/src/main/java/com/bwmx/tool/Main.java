@@ -104,6 +104,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
 
                                     AddPluginToolHook.Init();
                                     VasSwitcherHook.Init1();
+                                    VasSwitcherHook.Init2();
                                     StructMsgHook.Hook();
                                     ForwardRecentDisplayHook.Hook();
 //                       VipColorNickHook.Hook();
@@ -120,7 +121,6 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                                 MiniAppLogin.Hook();
                                                 TroopMemberListHook.Hook();
                                                 MsgListScrollerHook.Init();
-                                                VasSwitcherHook.Init2();
                                                 BubbleTextColorHook.Init();
 
                                             }
