@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.bwmx.tool.Main;
 
 import java.lang.reflect.Method;
@@ -42,13 +45,17 @@ public class MethodFinder {
 //        return null;
 //    }
 
+    @NonNull
     public static Class<?> FindClass(String className)
     {
 //        FileUnits.writelog("FindClass " + className);
         Class<?> classIfExists = XposedHelpers.findClassIfExists(className, Main.mLoader);
         if (classIfExists != null) return classIfExists;
-        else FileUnits.writelog("Class " + className +  " found error!");
-        return null;
+        else
+        {
+            FileUnits.writelog("Class " + className + " found error!");
+            return null;
+        }
     }
 
     public static Method FindMethod(Class<?> classes, String methodName, Object... obj)
@@ -65,6 +72,7 @@ public class MethodFinder {
         return null;
     }
 
+    @Nullable
     public static Class<?> FindMyClass(String name)
     {
 //        FileUnits.writelog("FindMyClass " + name);
@@ -234,15 +242,20 @@ public class MethodFinder {
                 String className = "tencent.im.oidb.cmd0x5eb.oidb_0x5eb$UdcUinData";
                 return FindClass(className);
             }
+            case "SVIPHandler": {
+                String className = "com.tencent.mobileqq.app.SVIPHandler";
+                return FindClass(className);
+            }
 //            case "BaseAuthorityPresenter": {
 //                AtomicReference<String> className = new AtomicReference<>("com.tencent.open.agent.auth.presenter.BaseAuthorityPresenter");
 //                return FindClass(className.get());
 //            }
-
+            default:
+                return FindClass(name);
         }
-        return null;
     }
 
+    @Nullable
     public static Method FindMyMethod(String classname, String methodname)
     {
         Class<?> classes = GetClass(classname);
@@ -251,8 +264,7 @@ public class MethodFinder {
         int QQ_version=HostInfo.getVerCode();
         switch (classname + "." + methodname) {
             case "QFixApplication.attachBaseContext": {
-                String methodName = "attachBaseContext";
-                return FindMethod(classes, methodName, Context.class);
+                return FindMethod(classes, "attachBaseContext", Context.class);
             }
             case "QQAppInterface.onCreate": {
                 return FindMethod(classes, "onCreate", Bundle.class);
@@ -285,7 +297,7 @@ public class MethodFinder {
                 return FindMethod(classes, methodName.get(), Context.class, String.class);
             }
             case "TroopMemberListAdapter.init":
-            case "MsgListScroller.scrollto0": {
+            case "MsgListScroller.ScrollTo0": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
                 if (QQ_version >= 8845) methodName.set("g");
                 else if (QQ_version >= 8000) return null;
@@ -307,26 +319,26 @@ public class MethodFinder {
                 if (QQ_version < 8845) return null;
                 return FindMethod(classes, methodName.get(),boolean.class, int.class, GetClass("AuthCheckData"));
             }
-//            case "VipIconTask.colornick": {
+//            case "VipIconTask.ColorNick": {
 //                AtomicReference<String> methodName = new AtomicReference<>("c");
 //                if (QQ_version < 9280) return null;
 //                return FindMethod(classes, methodName.get(),Context.class, String.class, GetClass("VipIconView"));
 //            }
-            case "RecentTask.colornick": {
+            case "RecentTask.ColorNick": {
                 AtomicReference<String> methodName = new AtomicReference<>("m");
                 if (QQ_version < 9280) return null;
                 return FindMethod(classes, methodName.get(), GetClass("RecentBaseData"), GetClass("BaseActivity"), GetClass("VipIconView"), float.class);
             }
-//            case "VipData.getColorName": {
-//                AtomicReference<String> methodName = new AtomicReference<>("getColorName");
-////                if (QQ_version < 8845) return null;
-//                return FindMethod(classes, methodName.get());
-//            }
-//            case "BaseAuthorityPresenter.Parse": {
-//                AtomicReference<String> methodName = new AtomicReference<>("R");
-////                if (QQ_version < 8845) return null;
-//                return FindMethod(classes, methodName.get(), GetClass("AuthCheckData"));
-//            }
+            case "VipData.getColorName": {
+                AtomicReference<String> methodName = new AtomicReference<>("getColorName");
+//                if (QQ_version < 8845) return null;
+                return FindMethod(classes, methodName.get());
+            }
+            case "BaseAuthorityPresenter.Parse": {
+                AtomicReference<String> methodName = new AtomicReference<>("R");
+//                if (QQ_version < 8845) return null;
+                return FindMethod(classes, methodName.get(), GetClass("AuthCheckData"));
+            }
             case "TextItemBuilder.Color":
             case "ReplyTextItemBuilder.Color":
             case "MixedMsgItemBuilder.Color": {
@@ -362,6 +374,9 @@ public class MethodFinder {
                 else if (QQ_version >= 8000) return null;
                 return FindMethod(classes, methodName.get(), GetClass("oidb_0x5eb$UdcUinData"));
             }
+            case "SVIPHandler.setSelfBubbleId": {
+                return FindMethod(classes, "setSelfBubbleId", int.class);
+            }
         }
         return null;
     }
@@ -390,6 +405,7 @@ public class MethodFinder {
         }
     }
 
+    @Nullable
     public static Object QRoteApi(String classname)
     {
         Class<?> classIfExists = GetClass("QRoute");

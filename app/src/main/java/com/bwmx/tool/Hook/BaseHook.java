@@ -14,16 +14,27 @@ import de.robv.android.xposed.XposedBridge;
 
 public class BaseHook {
     protected static String HookName = "BaseHook";
-//    protected static Boolean Switch = false;
-//    protected static XC_MethodHook MethodHook1;
-//    protected static XC_MethodHook.Unhook Unhook1;
-
 
     public static void Log(String Name,String log)
     {
         if (TextUtils.isEmpty(Name)) FileUnits.writelog("[" + HookName + "] " + log);
         else FileUnits.writelog("[" + Name + "] " + log);
     }
+
+    public static void LogStackTrace(String Name)
+    {
+        StackTraceElement[] stackTraceElements = new Throwable(Name).getStackTrace();
+        StringBuilder log = new StringBuilder();
+        log.append("堆栈");
+        // 使用for循环打印 调用栈查看调用关系
+        for (StackTraceElement stackTraceElement : stackTraceElements) {
+            log.append("\n");
+            log.append(stackTraceElement.toString());
+        }
+        Log(Name, log.toString());
+    }
+
+
 
     public static XC_MethodHook.Unhook Hook(Method method,XC_MethodHook methodHook, XC_MethodHook.Unhook unhook)
     {

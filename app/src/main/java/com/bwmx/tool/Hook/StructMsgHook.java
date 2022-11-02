@@ -14,9 +14,7 @@ public class StructMsgHook {
 
     public static void Hook() throws IOException {
         Class<?> ClassIfExists1 = MethodFinder.GetClass("StructMsgForGeneralShare");
-        Class<?> ClassIfExists2 = MethodFinder.GetClass("StructMsgForAudioShare");
 //        Method MethodIfExists1 = MethodFinder.GetMethod("StructMsgFactory", "init");
-
         if (ClassIfExists1 != null) {
 //                FileUnits.writelog("StructMsgFactory OK");
             XposedHelpers.findAndHookConstructor(ClassIfExists1, Bundle.class, new XC_MethodHook() {
@@ -45,6 +43,7 @@ public class StructMsgHook {
             });
         }
 
+        Class<?> ClassIfExists2 = MethodFinder.GetClass("StructMsgForAudioShare");
         if (ClassIfExists2 != null) {
             XposedHelpers.findAndHookConstructor(ClassIfExists2, Bundle.class, new XC_MethodHook() {
                 @Override

@@ -81,7 +81,7 @@ public class FileUnits {
             StringBuilder sb = new StringBuilder();
             String text;
             while((text = bufferedReader.readLine()) != null){
-            sb.append(text).append("\n");
+                sb.append(text).append("\n");
             }
             bufferedReader.close();
             return sb.toString();
@@ -93,9 +93,9 @@ public class FileUnits {
     }
 
     public static boolean WriteStringToFile(String filepath, String data, boolean append) {
-            File file = new File(filepath);
-            if (file.canWrite()) return WriteStringToFile(file, data, append);
-            else return WriteStringToFile(new File(Path, filepath), data, append);
+        File file = new File(filepath);
+        if (file.canWrite()) return WriteStringToFile(file, data, append);
+        else return WriteStringToFile(new File(Path, filepath), data, append);
         }
 
     public synchronized static boolean WriteStringToFile(File file, String data, boolean append) {

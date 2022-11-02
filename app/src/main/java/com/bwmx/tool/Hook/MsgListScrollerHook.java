@@ -51,7 +51,7 @@ public class MsgListScrollerHook extends BaseHook{
     }
 
     private static Boolean Hook() {
-        Method MethodIfExists1 = MethodFinder.GetMethod("MsgListScroller", "scrollto0");
+        Method MethodIfExists1 = MethodFinder.GetMethod("MsgListScroller", "ScrollTo0");
         //        Method MethodIfExists2 = MethodFinder.GetMethod("MsgListScroller", "scroll");
 //        if (MethodIfExists1 != null && MethodIfExists2 != null) {
 //                FileUnits.writelog("StructMsgFactory OK");

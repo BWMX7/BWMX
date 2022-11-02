@@ -24,8 +24,7 @@ public class AddPluginToolHook extends BaseHook{
     {
         MethodHook1 = new XC_MethodReplacement() {
             @Override
-            protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                super.afterHookedMethod(param);
+            protected Object replaceHookedMethod(MethodHookParam param) {
                 String name = (String) param.args[0];
                 Object[] objArr = (Object[]) param.args[1];
                 return AddPlugin(name, objArr);

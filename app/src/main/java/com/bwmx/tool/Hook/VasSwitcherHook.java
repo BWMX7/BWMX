@@ -21,6 +21,7 @@ public class VasSwitcherHook extends BaseHook
     private static XC_MethodHook.Unhook Unhook1;
     private static XC_MethodHook.Unhook Unhook2;
     private static XC_MethodHook.Unhook Unhook3;
+    private static XC_MethodHook.Unhook Unhook4;
 
     static
     {
@@ -87,7 +88,17 @@ public class VasSwitcherHook extends BaseHook
                 return null;
             }
         }, Unhook3);
-        return !HasNull(Unhook3);
+
+        Method MethodIfExists4 = MethodFinder.GetMethod("SVIPHandler", "setSelfBubbleId");
+        Unhook4 = Hook(MethodIfExists4, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) {
+                Object id = param.args[0];
+                Log("SVIPHandler Change Bubble To " + id);
+                LogStackTrace("SVIPHandler setSelfBubbleId");
+            }
+        }, Unhook4);
+        return !HasNull(Unhook3, Unhook4);
     }
 
     private static Boolean UnHook1() {
@@ -98,7 +109,8 @@ public class VasSwitcherHook extends BaseHook
 
     private static Boolean UnHook2() {
         Unhook3 = UnHook(Unhook3);
-        return HasNull(Unhook3);
+        Unhook4 = UnHook(Unhook4);
+        return HasNull(Unhook3, Unhook4);
     }
 
     public static boolean ChangeSwitch1(Boolean newSwitch)

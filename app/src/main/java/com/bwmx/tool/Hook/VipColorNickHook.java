@@ -13,7 +13,7 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class VipColorNickHook {
     public static void Hook() {
-        Method MethodIfExists1 = MethodFinder.GetMethod("RecentTask", "colornick");
+        Method MethodIfExists1 = MethodFinder.GetMethod("RecentTask", "ColorNick");
         if (MethodIfExists1 != null) {
             XposedBridge.hookMethod(MethodIfExists1, new XC_MethodHook() {
                 @Override
