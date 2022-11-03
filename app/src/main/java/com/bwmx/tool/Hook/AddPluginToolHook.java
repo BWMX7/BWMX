@@ -74,7 +74,7 @@ public class AddPluginToolHook extends BaseHook{
                 obj[0] = SignatureCheckHook.APK.PutUserAPK(objArr[0]);
                 break;
             case "ChangeRecentUser":
-                obj[0] = ForwardRecentDisplayHook.recentUserData.ChangeRecentUser((String) objArr[0], (Integer) objArr[1]);
+                obj[0] = ForwardRecentDisplayHook.recentUserData.ChangeRecentUser((String) objArr[0], (String) objArr[1], (Integer) objArr[2]);
                 break;
             case "ThemeHook":
                 Boolean change = (Boolean) objArr[0];

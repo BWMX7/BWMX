@@ -106,7 +106,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                     VasSwitcherHook.Init1();
                                     VasSwitcherHook.Init2();
                                     StructMsgHook.Hook();
-                                    ForwardRecentDisplayHook.Hook();
+                                    ForwardRecentDisplayHook.Init();
 //                       VipColorNickHook.Hook();
 
                                     Method MethodIfExists3 = MethodFinder.GetMethod("HelperProvider", "init");

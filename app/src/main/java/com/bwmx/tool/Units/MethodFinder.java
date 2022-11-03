@@ -45,14 +45,14 @@ public class MethodFinder {
 //        return null;
 //    }
 
-    @NonNull
-    public static Class<?> FindClass(String className)
-    {
+
+
+    public static Class<?> FindClass(String className) {
+        if (className == null) return null;
 //        FileUnits.writelog("FindClass " + className);
         Class<?> classIfExists = XposedHelpers.findClassIfExists(className, Main.mLoader);
         if (classIfExists != null) return classIfExists;
-        else
-        {
+        else {
             FileUnits.writelog("Class " + className + " found error!");
             return null;
         }
@@ -72,9 +72,10 @@ public class MethodFinder {
         return null;
     }
 
-    @Nullable
+
     public static Class<?> FindMyClass(String name)
     {
+        if (name == null) return null;
 //        FileUnits.writelog("FindMyClass " + name);
         int QQ_version= HostInfo.getVerCode();
         switch (name) {
@@ -227,6 +228,10 @@ public class MethodFinder {
                 String className = "com.tencent.mobileqq.data.RecentUser";
                 return FindClass(className);
             }
+            case "ForwardRecentActivity": {
+                String className = "com.tencent.mobileqq.activity.ForwardRecentActivity";
+                return FindClass(className);
+            }
             case "ForwardSelectionRecentFriendGridAdapter": {
                 String className = "com.tencent.mobileqq.adapter.ForwardSelectionRecentFriendGridAdapter";
                 return FindClass(className);
@@ -254,6 +259,7 @@ public class MethodFinder {
                 return FindClass(name);
         }
     }
+
 
     @Nullable
     public static Method FindMyMethod(String classname, String methodname)
@@ -361,6 +367,9 @@ public class MethodFinder {
                 else if (QQ_version >= 8845) methodName.set("X4");
                 else if (QQ_version >= 8000) return null;
                 return FindMethod(classes, methodName.get(), int.class);
+            }
+            case "ForwardRecentActivity.getRecentForwardListWithoutShowUp": {
+                return FindMethod(classes, "getRecentForwardListWithoutShowUp");
             }
             case "ForwardSelectionRecentFriendGridAdapter.DisplayData": {
                 AtomicReference<String> methodName = new AtomicReference<>("b");
