@@ -96,16 +96,18 @@ public class MethodFinder {
                 return FindClass(className);
             }
             case "HelperProvider": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.helper.HelperProvider");
-                if (QQ_version >= 9280) {
-                    className.set("com.tencent.mobileqq.activity.aio.helper.bw");
-                } else if (QQ_version >= 9135) {
+                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.helper.HelperProvider");//8.8.*
+                if (QQ_version >= 9570) {//8.9.18
+                    className.set("com.tencent.mobileqq.activity.aio.helper.bx");
+                }else if (QQ_version == 9280) {//8.9.15
                     className.set("com.tencent.mobileqq.activity.aio.helper.bv");
-                } else if (QQ_version >= 9000) {
+                } else if (QQ_version >= 9135) {//8.9.13
+                    className.set("com.tencent.mobileqq.activity.aio.helper.bv");
+                } else if (QQ_version >= 9000) {//8.9.10
                     className.set("com.tencent.mobileqq.activity.aio.helper.bu");
-                } else if (QQ_version >= 8845) {
+                } else if (QQ_version >= 8845) {//8.9.5
                     className.set("com.tencent.mobileqq.activity.aio.helper.bs");
-                } else if (QQ_version >= 8000) return null;
+                } else if (QQ_version >= 8000) return null;//8.9.0
                 return FindClass(className.get());
             }
             case "StructMsgForGeneralShare": {
@@ -349,12 +351,14 @@ public class MethodFinder {
             case "ReplyTextItemBuilder.Color":
             case "MixedMsgItemBuilder.Color": {
                 AtomicReference<String> methodName = new AtomicReference<>("n0");
+                if (QQ_version >= 9570) methodName.set("m0");
                 if (QQ_version < 8845) return null;
                 return FindMethod(classes, methodName.get(), GetClass("BaseBubbleBuilder$d"), View.class, GetClass("ChatMessage"), GetClass("BubbleInfo"));
             }
             case "ThemeHandler.SwitchTheme": {
                 AtomicReference<String> methodName = new AtomicReference<>("b");
-                if (QQ_version >= 9425) methodName.set("d5");
+                if (QQ_version >= 9570) methodName.set("b5");
+                else if (QQ_version >= 9425) methodName.set("d5");
                 else if (QQ_version >= 9280) methodName.set("g5");
                 else if (QQ_version >= 8845) methodName.set("i5");
                 else if (QQ_version >= 8000) return null;
@@ -362,7 +366,8 @@ public class MethodFinder {
             }
             case "NormalNightModeHandler.SwitchTheme": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 9425) methodName.set("S4");
+                if (QQ_version >= 9570) methodName.set("Q4");
+                else if (QQ_version >= 9425) methodName.set("S4");
                 else if (QQ_version >= 9280) methodName.set("V4");
                 else if (QQ_version >= 8845) methodName.set("X4");
                 else if (QQ_version >= 8000) return null;
