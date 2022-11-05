@@ -16,8 +16,8 @@ android {
         applicationId "com.bwmx.tool"
         minSdk 27
         targetSdk 32
-        versionCode 51
-        versionName "3.8.1"
+        versionCode 53
+        versionName "3.8.2"
     }
 
     signingConfigs {

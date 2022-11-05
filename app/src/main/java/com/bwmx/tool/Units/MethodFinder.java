@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bwmx.tool.Main;
@@ -100,7 +99,7 @@ public class MethodFinder {
                 if (QQ_version >= 9570) {//8.9.18
                     className.set("com.tencent.mobileqq.activity.aio.helper.bx");
                 }else if (QQ_version >= 9425) {//8.9.15
-                    className.set("com.tencent.mobileqq.activity.aio.helper.bv");
+                    className.set("com.tencent.mobileqq.activity.aio.helper.bw");
                 } else if (QQ_version >= 9280) {//8.9.13
                     className.set("com.tencent.mobileqq.activity.aio.helper.bv");
                 } else if (QQ_version >= 9135) {//8.9.10
