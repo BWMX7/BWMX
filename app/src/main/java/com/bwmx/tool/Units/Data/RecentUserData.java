@@ -102,7 +102,7 @@ public class RecentUserData extends BaseData
     public String ChangeRecentUser(String TroopUin, String QQ, Integer UinType)
     {
         String name = String.valueOf(((TroopUin == null ? "" : TroopUin) + (QQ == null ? "" : QQ)).hashCode() + UinType);
-        if (IfHasSetData(name)) return RemoveRecentUser(TroopUin, QQ, UinType) ? "已从最近转发列表删除" : "从最近转发列表删除失败";
+        if (IfHasItemData(name, "UinType")) return RemoveRecentUser(TroopUin, QQ, UinType) ? "已从最近转发列表删除" : "从最近转发列表删除失败";
         else  return AddNRecentUser(TroopUin, QQ, UinType)  ? "已添加到最近转发列表" : "添加到最近转发列表失败";
     }
 }
