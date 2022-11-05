@@ -98,11 +98,11 @@ public class MethodFinder {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.helper.HelperProvider");//8.8.*
                 if (QQ_version >= 9570) {//8.9.18
                     className.set("com.tencent.mobileqq.activity.aio.helper.bx");
-                }else if (QQ_version >= 9425) {//8.9.15
+                }else if (QQ_version >= 9280) {//8.9.13-8.9.15(9425)
                     className.set("com.tencent.mobileqq.activity.aio.helper.bw");
-                } else if (QQ_version >= 9280) {//8.9.13
-                    className.set("com.tencent.mobileqq.activity.aio.helper.bv");
                 } else if (QQ_version >= 9135) {//8.9.10
+                    className.set("com.tencent.mobileqq.activity.aio.helper.bv");
+                } else if (QQ_version >= 8995) {//8.9.8
                     className.set("com.tencent.mobileqq.activity.aio.helper.bu");
                 } else if (QQ_version >= 8845) {//8.9.5
                     className.set("com.tencent.mobileqq.activity.aio.helper.bs");
