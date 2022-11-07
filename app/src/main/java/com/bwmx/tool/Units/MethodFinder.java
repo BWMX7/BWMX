@@ -166,13 +166,13 @@ public class MethodFinder {
                 return FindClass(className.get());
             }
             case "QRoute": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.qroute.QRoute");
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.qroute.QRoute";
+                return FindClass(className);
             }
             case "IVipColorName": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.vip.api.IVipColorName");
+                String className = "com.tencent.mobileqq.vip.api.IVipColorName";
                 if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+                return FindClass(className);
             }
             case "VipData": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.vip.api.VipData");
@@ -200,9 +200,8 @@ public class MethodFinder {
                 return FindClass(className.get());
             }
             case "ChatMessage": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.data.ChatMessage");
-                if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.data.ChatMessage";
+                return FindClass(className);
             }
             case "BubbleInfo": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.bubble.d");
@@ -251,6 +250,13 @@ public class MethodFinder {
             case "SVIPHandler": {
                 String className = "com.tencent.mobileqq.app.SVIPHandler";
                 return FindClass(className);
+            }
+            case "QQCustomMenuItem": {
+                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.utils.dialogutils.QQCustomMenuItem");
+                if (QQ_version >= 8845) {
+                    className.set("com.tencent.mobileqq.utils.dialogutils.b");
+                } else if (QQ_version >= 8000) return null;
+                return FindClass(className.get());
             }
 //            case "BaseAuthorityPresenter": {
 //                AtomicReference<String> className = new AtomicReference<>("com.tencent.open.agent.auth.presenter.BaseAuthorityPresenter");
@@ -390,6 +396,17 @@ public class MethodFinder {
             case "SVIPHandler.setSelfBubbleId": {
                 return FindMethod(classes, "setSelfBubbleId", int.class);
             }
+            case "TextItemBuilder.Dialog":
+            case "MixedMsgItemBuilder.Dialog": {
+                AtomicReference<String> methodName = new AtomicReference<>("a");
+                if (QQ_version >= 8845) methodName.set("o");
+                else if (QQ_version >= 8000) return null;
+                return FindMethod(classes, methodName.get(), View.class);
+            }
+            case "TextItemBuilder.Click":
+            case "MixedMsgItemBuilder.Click": {
+                return FindMethod(classes, "a", int.class, Context.class, GetClass("ChatMessage"));
+            }
         }
         return null;
     }
@@ -423,7 +440,9 @@ public class MethodFinder {
     {
         Class<?> classIfExists = GetClass("QRoute");
         if (classIfExists == null) return null;
-        return XposedHelpers.callStaticMethod(classIfExists, "api", GetClass(classname));
+        Class<?> classIfExists2 = GetClass(classname);
+        if (classIfExists2 == null) return null;
+        return XposedHelpers.callStaticMethod(classIfExists, "api", classIfExists2);
     }
 
 }

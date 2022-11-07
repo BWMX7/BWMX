@@ -112,7 +112,13 @@ public class BubbleTextColorHook extends BaseHook{
         Unhook1 = Hook(MethodIfExists1, MethodHook1, Unhook1);
         Unhook2 = Hook(MethodIfExists2, MethodHook1, Unhook2);
         Unhook3 = Hook(MethodIfExists3, MethodHook1, Unhook3);
-        return !HasNull(Unhook1, Unhook2, Unhook3);
+        boolean ok = !HasNull(Unhook1, Unhook2, Unhook3);
+        if (ok)
+        {
+            QQCustomMenuItemHook.Hook("TextItemBuilder");
+            QQCustomMenuItemHook.Hook("MixedMsgItemBuilder");
+        }
+        return ok;
     }
 
     public static Boolean UnHook() {
