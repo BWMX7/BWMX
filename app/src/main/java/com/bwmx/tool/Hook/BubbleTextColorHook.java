@@ -1,11 +1,15 @@
 package com.bwmx.tool.Hook;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bwmx.tool.Main;
 import com.bwmx.tool.Units.Data.ChangeBubbleData;
 import com.bwmx.tool.Units.MethodFinder;
+import com.bwmx.tool.Units.PluginTool;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -91,6 +95,10 @@ public class BubbleTextColorHook extends BaseHook{
                 }
             }
         };
+        SetColor setColor = new SetColor("复制ID", 3200);
+        QQCustomMenuItemHook.addItem("TextItemBuilder" , setColor);
+        QQCustomMenuItemHook.addItem("ReplyTextItemBuilder", setColor);
+        QQCustomMenuItemHook.addItem("MixedMsgItemBuilder", setColor);
     }
 
     public static void Init()
@@ -111,15 +119,7 @@ public class BubbleTextColorHook extends BaseHook{
         Unhook1 = Hook(MethodIfExists1, MethodHook1, Unhook1);
         Unhook2 = Hook(MethodIfExists2, MethodHook1, Unhook2);
         Unhook3 = Hook(MethodIfExists3, MethodHook1, Unhook3);
-        boolean ok = !HasNull(Unhook1, Unhook2, Unhook3);
-        if (ok)
-        {
-            SetColor setColor = new SetColor("修改颜色", 3200);
-            return QQCustomMenuItemHook.addItem("TextItemBuilder" , setColor)
-                    && QQCustomMenuItemHook.addItem("ReplyTextItemBuilder", setColor)
-                    && QQCustomMenuItemHook.addItem("MixedMsgItemBuilder", setColor);
-        }
-        return false;
+        return !HasNull(Unhook1, Unhook2, Unhook3);
     }
 
     public static boolean UnHook() {
@@ -152,6 +152,10 @@ public class BubbleTextColorHook extends BaseHook{
 //            LogStackTrace(ItemName);
             Integer bubbleID = (Integer) MethodFinder.BusinessHandler("SVIP_HANDLER", "getBubbleIdFromMessageRecord", param.args[2]);
             Log("BubbleID:" + bubbleID);
+            ClipboardManager clipboardManager = (ClipboardManager)Main.AppContext.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText(null, bubbleID != null ? bubbleID.toString() : null);
+            clipboardManager.setPrimaryClip(clipData);
+            PluginTool.ShowToast("气泡ID" + bubbleID + "已复制");
         }
     }
 

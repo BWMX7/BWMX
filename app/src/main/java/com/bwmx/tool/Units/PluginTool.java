@@ -2,6 +2,11 @@ package com.bwmx.tool.Units;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
+
+import com.bwmx.tool.Main;
 
 public class PluginTool {
     public static Bitmap RemoveColor(Bitmap bm,int removecolor,int opt)
@@ -22,9 +27,8 @@ public class PluginTool {
 //        opt=Math.abs(opt);
 //        Toast(removecolor+" "+width * height);
         for (int i = 0; i < width * height; i++) {
-            int num = i;
-            int color = oldPx[num];
-            if (color == removecolor) newPx[num] = 0;
+            int color = oldPx[i];
+            if (color == removecolor) newPx[i] = 0;
             else {
 //                newPx[num] = color;
                 int r = Color.red(color);
@@ -33,11 +37,15 @@ public class PluginTool {
                 // a = Color.alpha(color);
 //                if (opt >= Math.abs(rr - r) && Math.abs(rb - b) <= opt && Math.abs(rg - g) <= opt)
                 if (Math.abs(rr - r) <= opt && Math.abs(rb - b) <= opt && Math.abs(rg - g) <= opt)
-                    newPx[num] = 0;
-                else newPx[num] = color;
+                    newPx[i] = 0;
+                else newPx[i] = color;
             }
         }
         bmp.setPixels(newPx, 0, width, 0, 0, width, height);
         return bmp;
+    }
+
+    public static <T> void ShowToast(T Value){
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(Main.AppContext, Value.toString(), Toast.LENGTH_SHORT).show());
     }
 }
