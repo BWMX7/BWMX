@@ -1,5 +1,7 @@
 package com.bwmx.tool.Units.Data;
 
+import androidx.annotation.NonNull;
+
 import com.bwmx.tool.Main;
 import com.bwmx.tool.Units.FileUnits;
 import com.bwmx.tool.Units.MethodFinder;
@@ -39,6 +41,7 @@ public class RecentUserData extends BaseData
         return SelfUser;
     }
 
+    @NonNull
     private ArrayList<Object> ReadData()
     {
         ArrayList<Object> arrayList = new ArrayList<>();

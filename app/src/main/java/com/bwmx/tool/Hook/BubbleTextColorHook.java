@@ -151,7 +151,7 @@ public class BubbleTextColorHook extends BaseHook{
 //            Log("测试2");
 //            LogStackTrace(ItemName);
             Integer bubbleID = (Integer) MethodFinder.BusinessHandler("SVIP_HANDLER", "getBubbleIdFromMessageRecord", param.args[2]);
-            Log("BubbleID:" + bubbleID);
+//            Log("BubbleID:" + bubbleID);
             ClipboardManager clipboardManager = (ClipboardManager)Main.AppContext.getSystemService(Context.CLIPBOARD_SERVICE);
             ClipData clipData = ClipData.newPlainText(null, bubbleID != null ? bubbleID.toString() : null);
             clipboardManager.setPrimaryClip(clipData);

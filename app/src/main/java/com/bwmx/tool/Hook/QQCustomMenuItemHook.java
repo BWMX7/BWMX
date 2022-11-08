@@ -86,18 +86,23 @@ public class QQCustomMenuItemHook extends BaseHook{
     }
 
     private static boolean Hook(String ClassName) {
+        if (ClassName == null) return false;
+        if (ClassName.equals("ReplyTextItemBuilder")) return Hook("TextItemBuilder");
+
         if (!UnhookMap1.containsKey(ClassName))
         {
-            if (ClassName.equals("ReplyTextItemBuilder")) return Hook("TextItemBuilder");
             Method MethodIfExists1 = MethodFinder.GetMethod(ClassName, "Dialog");
             XC_MethodHook.Unhook Unhook1 = Hook(MethodIfExists1, MethodHook1, null);
             if (HasNull(Unhook1)) return false;
+            UnhookMap1.put(ClassName, Unhook1);
         }
+
         if (!UnhookMap2.containsKey(ClassName))
         {
             Method MethodIfExists2 = MethodFinder.GetMethod(ClassName, "Click");
             XC_MethodHook.Unhook Unhook2 = Hook(MethodIfExists2, MethodHook2, null);
-            return !HasNull(Unhook2);
+            if (HasNull(Unhook2)) return false;
+            UnhookMap2.put(ClassName, Unhook2);
         }
         return true;
     }
@@ -120,6 +125,7 @@ public class QQCustomMenuItemHook extends BaseHook{
 
     public static boolean addItem(String ClassName, Click MyClick)
     {
+        if (ClassName == null || MyClick == null) return false;
         if (Hook(ClassName))
         {
             Class<?> aClass = MethodFinder.GetClass(ClassName);
@@ -154,7 +160,7 @@ public class QQCustomMenuItemHook extends BaseHook{
             ClickMap.put(aClass, NewClicks);
 //            Log(ClickMap.toString());
         }
-        return true;
+        return false;
     }
 
     public static boolean QQCustomMenuItemEquals(Object obj1, Object obj2)
@@ -163,9 +169,11 @@ public class QQCustomMenuItemHook extends BaseHook{
         try {
             if (obj1.getClass().equals(QQCustomMenuItemClass) && obj2.getClass().equals(QQCustomMenuItemClass))
             {
-                Field field1 = XposedHelpers.findField(QQCustomMenuItemClass, "a");
-                String name1 = (String) field1.get(obj1);
-                String name2 = (String) field1.get(obj2);
+//                Field field1 = XposedHelpers.findField(QQCustomMenuItemClass, "a");
+//                String name1 = (String) field1.get(obj1);
+//                String name2 = (String) field1.get(obj2);
+                String name1 = (String) XposedHelpers.getObjectField(obj1, "a");
+                String name2 = (String) XposedHelpers.getObjectField(obj2, "a");
                 if (name1.equals(name2)) {
                     Field field2 = XposedHelpers.findField(QQCustomMenuItemClass, "b");
                     int id1 = (int) field2.get(obj1);
@@ -202,6 +210,7 @@ public class QQCustomMenuItemHook extends BaseHook{
         public void run(XC_MethodHook.MethodHookParam param)
         {
             Log( ItemName + ":" + ItemID + " -> Run");
+//            LogStackTrace(ItemName);
         }
 
     }
