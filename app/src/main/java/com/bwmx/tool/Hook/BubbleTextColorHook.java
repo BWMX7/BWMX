@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import com.bwmx.tool.Main;
 import com.bwmx.tool.Units.Data.ChangeBubbleData;
-import com.bwmx.tool.Units.FileUnits;
 import com.bwmx.tool.Units.MethodFinder;
 
 import java.lang.reflect.Field;
@@ -115,10 +114,11 @@ public class BubbleTextColorHook extends BaseHook{
         boolean ok = !HasNull(Unhook1, Unhook2, Unhook3);
         if (ok)
         {
-            QQCustomMenuItemHook.Hook("TextItemBuilder");
-            QQCustomMenuItemHook.Hook("MixedMsgItemBuilder");
+            SetColor setColor = new SetColor("修改字体颜色", 3200);
+            return QQCustomMenuItemHook.addItem("TextItemBuilder" , setColor)
+                    && QQCustomMenuItemHook.addItem("MixedMsgItemBuilder", setColor);
         }
-        return ok;
+        return false;
     }
 
     public static Boolean UnHook() {
@@ -135,6 +135,20 @@ public class BubbleTextColorHook extends BaseHook{
         if (ok) Switch = change;
         if (Switch) return Hook();
         else return !UnHook();
+    }
+
+    private static class SetColor extends QQCustomMenuItemHook.Click
+    {
+
+        SetColor(String name, int id) {
+            super(name, id);
+        }
+
+        @Override
+        public void run(XC_MethodHook.MethodHookParam param) {
+            super.run(param);
+            Log("测试2");
+        }
     }
 
 //        Method MethodIfExists2 = MethodFinder.GetMethod("VipData", "getColorName");
