@@ -2,6 +2,7 @@ package com.bwmx.tool.Units;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -262,6 +263,10 @@ public class MethodFinder {
 //                AtomicReference<String> className = new AtomicReference<>("com.tencent.open.agent.auth.presenter.BaseAuthorityPresenter");
 //                return FindClass(className.get());
 //            }
+            case "BusinessHandlerFactory": {
+                String className = "com.tencent.mobileqq.app.BusinessHandlerFactory";
+                return FindClass(className);
+            }
             default:
                 return FindClass(name);
         }
@@ -404,6 +409,7 @@ public class MethodFinder {
                 return FindMethod(classes, methodName.get(), View.class);
             }
             case "TextItemBuilder.Click":
+            case "ReplyTextItemBuilder.Click":
             case "MixedMsgItemBuilder.Click": {
                 return FindMethod(classes, "a", int.class, Context.class, GetClass("ChatMessage"));
             }
@@ -436,13 +442,26 @@ public class MethodFinder {
     }
 
     @Nullable
-    public static Object QRoteApi(String classname)
+    public static Object QRoteApi(String ClassName)
     {
         Class<?> classIfExists = GetClass("QRoute");
         if (classIfExists == null) return null;
-        Class<?> classIfExists2 = GetClass(classname);
+        Class<?> classIfExists2 = GetClass(ClassName);
         if (classIfExists2 == null) return null;
         return XposedHelpers.callStaticMethod(classIfExists, "api", classIfExists2);
+    }
+
+    @Nullable
+    public static Object BusinessHandler(String HandlerName, String methodName, Object... objects)
+    {
+        Class<?> classIfExists = GetClass("BusinessHandlerFactory");
+        if (classIfExists == null) return null;
+//        Field field1 = XposedHelpers.findFieldIfExists(classIfExists, HandlerName);
+//        if (field1 == null) return null;
+        String handlerName = (String) XposedHelpers.getStaticObjectField(classIfExists, HandlerName);
+        if (TextUtils.isEmpty(handlerName)) return null;
+        Object handler = XposedHelpers.callMethod(Main.Runtime, "getBusinessHandler", handlerName);
+        return XposedHelpers.callMethod(handler, methodName, objects);
     }
 
 }
