@@ -43,7 +43,7 @@ public class QQCustomMenuItemHook extends BaseHook{
                 Object[] ret = (Object[]) Array.newInstance(arr.getClass().getComponentType(),Array.getLength(arr) + Array.getLength(add));
                 System.arraycopy(arr, 0, ret, 0, Array.getLength(arr));
                 System.arraycopy(add, 0, ret, Array.getLength(arr), Array.getLength(add));
-                Log(Arrays.toString(ret));
+//                Log(Arrays.toString(ret));
                 param.setResult(ret);
                 }
             }
@@ -88,6 +88,7 @@ public class QQCustomMenuItemHook extends BaseHook{
     private static boolean Hook(String ClassName) {
         if (!UnhookMap1.containsKey(ClassName))
         {
+            if (ClassName.equals("ReplyTextItemBuilder")) return Hook("TextItemBuilder");
             Method MethodIfExists1 = MethodFinder.GetMethod(ClassName, "Dialog");
             XC_MethodHook.Unhook Unhook1 = Hook(MethodIfExists1, MethodHook1, null);
             if (HasNull(Unhook1)) return false;
@@ -122,10 +123,10 @@ public class QQCustomMenuItemHook extends BaseHook{
         if (Hook(ClassName))
         {
             Class<?> aClass = MethodFinder.GetClass(ClassName);
-            Log(aClass + " " + MyClick);
+//            Log(aClass + " " + MyClick);
             Object[] NewItems;
             Object MenuItem = XposedHelpers.newInstance(QQCustomMenuItemClass, MyClick.ItemID, MyClick.ItemName, Integer.MAX_VALUE - 1);
-            Log(MenuItem.toString());
+//            Log(MenuItem.toString());
             if (ItemMap.containsKey(aClass)) {
                 Object[] items = ItemMap.get(aClass);
                 for (Object item : items) {
@@ -137,7 +138,7 @@ public class QQCustomMenuItemHook extends BaseHook{
             else NewItems = new Object[1];
             NewItems[NewItems.length - 1] = MenuItem;
             ItemMap.put(aClass, NewItems);
-            Log(ItemMap.toString());
+//            Log(ItemMap.toString());
 
             Click[] NewClicks;
             if (ClickMap.containsKey(aClass)) {
@@ -151,13 +152,14 @@ public class QQCustomMenuItemHook extends BaseHook{
             else NewClicks = new Click[1];
             NewClicks[NewClicks.length - 1] = MyClick;
             ClickMap.put(aClass, NewClicks);
-            Log(ClickMap.toString());
+//            Log(ClickMap.toString());
         }
         return true;
     }
 
     public static boolean QQCustomMenuItemEquals(Object obj1, Object obj2)
     {
+        if (obj1 == null || obj2 == null) return false;
         try {
             if (obj1.getClass().equals(QQCustomMenuItemClass) && obj2.getClass().equals(QQCustomMenuItemClass))
             {
@@ -186,7 +188,7 @@ public class QQCustomMenuItemHook extends BaseHook{
         {
             ItemName = name;
             ItemID = id;
-            Log("Click -> " + ItemName + ":" + ItemID);
+            Log("New Click -> " + ItemName + ":" + ItemID);
         }
 
         @Override
@@ -199,7 +201,7 @@ public class QQCustomMenuItemHook extends BaseHook{
 
         public void run(XC_MethodHook.MethodHookParam param)
         {
-            Log("Click -> Run " + param);
+            Log( ItemName + ":" + ItemID + " -> Run");
         }
 
     }

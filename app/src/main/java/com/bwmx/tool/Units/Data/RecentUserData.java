@@ -44,7 +44,6 @@ public class RecentUserData extends BaseData
         ArrayList<Object> arrayList = new ArrayList<>();
 
         for (Iterator<String> it = Data.keys(); it.hasNext(); ) {
-            try {
             String name = it.next();
             Integer UinType = (Integer) GetItemData(name, "UinType");
             if (UinType == null) continue;
@@ -54,13 +53,11 @@ public class RecentUserData extends BaseData
                 String TroopUin = (String) GetItemData(name, "TroopUin");
                 String QQ = (String) GetItemData(name, "QQ");
                 Object RecentUser = NewUser(QQ, 1000);
-                Field field = XposedHelpers.findField(RecentUserClass, "troopUin");
-                field.set(RecentUser, TroopUin);
+//                Field field = XposedHelpers.findField(RecentUserClass, "troopUin");
+//                field.set(RecentUser, TroopUin);
+                XposedHelpers.setObjectField(RecentUser, "troopUin", TroopUin);
                 arrayList.add(RecentUser);
                 }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
         }
 //        arrayList.add(SelfUser);
         return arrayList;

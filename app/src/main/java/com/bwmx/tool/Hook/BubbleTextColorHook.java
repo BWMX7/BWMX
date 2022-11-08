@@ -99,12 +99,12 @@ public class BubbleTextColorHook extends BaseHook{
         if (Switch) Log("Hook " + Hook());
     }
 
-    private static void Log(String log)
+    private static void Log(Object log)
     {
         Log(HookName, log);
     }
 
-    public static Boolean Hook() {
+    public static boolean Hook() {
         Method MethodIfExists1 = MethodFinder.GetMethod("TextItemBuilder", "Color");
         Method MethodIfExists2 = MethodFinder.GetMethod("ReplyTextItemBuilder", "Color");
         Method MethodIfExists3 = MethodFinder.GetMethod("MixedMsgItemBuilder", "Color");
@@ -114,14 +114,15 @@ public class BubbleTextColorHook extends BaseHook{
         boolean ok = !HasNull(Unhook1, Unhook2, Unhook3);
         if (ok)
         {
-            SetColor setColor = new SetColor("修改字体颜色", 3200);
+            SetColor setColor = new SetColor("修改颜色", 3200);
             return QQCustomMenuItemHook.addItem("TextItemBuilder" , setColor)
+                    && QQCustomMenuItemHook.addItem("ReplyTextItemBuilder", setColor)
                     && QQCustomMenuItemHook.addItem("MixedMsgItemBuilder", setColor);
         }
         return false;
     }
 
-    public static Boolean UnHook() {
+    public static boolean UnHook() {
         Unhook1 = UnHook(Unhook1);
         Unhook2 = UnHook(Unhook2);
         Unhook3 = UnHook(Unhook3);
@@ -147,7 +148,10 @@ public class BubbleTextColorHook extends BaseHook{
         @Override
         public void run(XC_MethodHook.MethodHookParam param) {
             super.run(param);
-            Log("测试2");
+//            Log("测试2");
+//            LogStackTrace(ItemName);
+            Integer bubbleID = (Integer) MethodFinder.BusinessHandler("SVIP_HANDLER", "getBubbleIdFromMessageRecord", param.args[2]);
+            Log("BubbleID:" + bubbleID);
         }
     }
 

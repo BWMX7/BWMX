@@ -15,7 +15,7 @@ import de.robv.android.xposed.XposedBridge;
 public class BaseHook {
     protected static String HookName = "BaseHook";
 
-    public static void Log(String Name,String log)
+    public static void Log(String Name,Object log)
     {
         if (TextUtils.isEmpty(Name)) FileUnits.writelog("[" + HookName + "]" + log);
         else FileUnits.writelog("[" + Name + "]" + log);
