@@ -2,6 +2,8 @@ package com.bwmx.tool.Units;
 
 import android.os.Environment;
 
+import androidx.annotation.Nullable;
+
 import com.bwmx.tool.Main;
 
 import java.io.BufferedReader;
@@ -42,9 +44,10 @@ public class FileUnits {
         }
     }
 
-    public synchronized static boolean writelog(String log) {
+    public synchronized static boolean writelog(Object log) {
         String log2 = "[" + Main.ProcessName + "]" + log;
         XposedBridge.log("[萌块]" + log2);
+        if (log2.toLowerCase(Locale.ROOT).contains("error")) PluginTool.ShowToast(log2);
         String data = "[" + GetNowTime("MM-dd HH:mm:ss.SS") + "]" + log2;
         try {
             File file = new File(Path, "log.txt");
@@ -74,6 +77,7 @@ public class FileUnits {
 
     public synchronized static String ReadStringFromFile(File file)
     {
+        if (file == null) return null;
         try{
             if(!file.exists()) return null;
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -99,6 +103,7 @@ public class FileUnits {
         }
 
     public synchronized static boolean WriteStringToFile(File file, String data, boolean append) {
+        if (file == null) return false;
         try {
             AtomicBoolean create = new AtomicBoolean(true);
             if(!Objects.requireNonNull(file.getParentFile()).exists()) create.set(file.getParentFile().mkdirs());
@@ -124,8 +129,10 @@ public class FileUnits {
         else return ReadObjectFromFile(new File(Path, filepath));
     }
 
+    @Nullable
     public synchronized static Object ReadObjectFromFile(File file)
     {
+        if (file == null) return null;
         try{
             if(!file.exists()) return null;
             FileInputStream fileIn = new FileInputStream(file);
@@ -146,6 +153,7 @@ public class FileUnits {
 
     public synchronized static boolean WriteObjectToFile(File file,Object WriteData)
     {
+        if (file == null) return false;
         try{
             AtomicBoolean create = new AtomicBoolean(true);
             if(!Objects.requireNonNull(file.getParentFile()).exists()) create.set(file.getParentFile().mkdirs());

@@ -96,9 +96,7 @@ public class BubbleTextColorHook extends BaseHook{
             }
         };
         SetColor setColor = new SetColor("复制ID", 3200);
-        QQCustomMenuItemHook.addItem("TextItemBuilder" , setColor);
-        QQCustomMenuItemHook.addItem("ReplyTextItemBuilder", setColor);
-        QQCustomMenuItemHook.addItem("MixedMsgItemBuilder", setColor);
+        QQCustomMenuItemHook.addItem(new String[]{"Text", "ReplyText", "MixedMsg"}, setColor);
     }
 
     public static void Init()

@@ -1,12 +1,13 @@
 package com.bwmx.tool.Hook;
 
 
+import androidx.annotation.NonNull;
+
 import com.bwmx.tool.Units.MethodFinder;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -88,6 +89,7 @@ public class QQCustomMenuItemHook extends BaseHook{
     private static boolean Hook(String ClassName) {
         if (ClassName == null) return false;
         if (ClassName.equals("ReplyTextItemBuilder")) return Hook("TextItemBuilder");
+        if (ClassName.equals("PicItemBuilder")) return Hook("BasePicItemBuilder");
 
         if (!UnhookMap1.containsKey(ClassName))
         {
@@ -107,60 +109,86 @@ public class QQCustomMenuItemHook extends BaseHook{
         return true;
     }
 
-    private static boolean UnHook(String ClassName) {
-        if (UnhookMap1.containsKey(ClassName))
-        {
-            XC_MethodHook.Unhook Unhook1 = UnhookMap1.get(ClassName);
-            if (!HasNull(UnHook(Unhook1))) return false;
-            UnhookMap1.remove(ClassName);
+//    private static boolean UnHook(String ClassName) {
+//        if (UnhookMap1.containsKey(ClassName))
+//        {
+//            XC_MethodHook.Unhook Unhook1 = UnhookMap1.get(ClassName);
+//            if (!HasNull(UnHook(Unhook1))) return false;
+//            UnhookMap1.remove(ClassName);
+//        }
+//        if (UnhookMap2.containsKey(ClassName))
+//        {
+//            XC_MethodHook.Unhook Unhook2 = UnhookMap2.get(ClassName);
+//            if (!HasNull(UnHook(Unhook2))) return false;
+//            UnhookMap2.remove(ClassName);
+//        }
+//        return true;
+//    }
+
+    private static void addShow(Class<?> aClass, String ItemName, int ItemID)
+    {
+//            Log(aClass + " " + MyClick);
+        Object[] NewItems;
+        Object MenuItem = XposedHelpers.newInstance(QQCustomMenuItemClass, ItemID, ItemName, Integer.MAX_VALUE - 1);
+//            Log(MenuItem.toString());
+        Object[] items = ItemMap.get(aClass);
+        if (items != null) {
+            for (Object item : items) {
+                if (QQCustomMenuItemEquals(item, MenuItem)) return;
+            }
+            NewItems = new Object[items.length + 1];
+            System.arraycopy(items, 0, NewItems, 0, items.length);
         }
-        if (UnhookMap2.containsKey(ClassName))
-        {
-            XC_MethodHook.Unhook Unhook2 = UnhookMap2.get(ClassName);
-            if (!HasNull(UnHook(Unhook2))) return false;
-            UnhookMap2.remove(ClassName);
-        }
-        return true;
+        else NewItems = new Object[1];
+        NewItems[NewItems.length - 1] = MenuItem;
+        ItemMap.put(aClass, NewItems);
+//            Log(ItemMap.toString());
     }
 
-    public static boolean addItem(String ClassName, Click MyClick)
+    private static void addClick(Class<?> aClass, Click MyClick)
     {
-        if (ClassName == null || MyClick == null) return false;
+        Click[] NewClicks;
+        Click[] Clicks = ClickMap.get(aClass);
+        if (Clicks != null)
+        {
+            for (int i = 0; i < Clicks.length; i ++)
+            {
+                if (Clicks[i].equals(MyClick)) {
+                    Clicks[i] = MyClick;
+                    ClickMap.put(aClass, Clicks);
+                    return;
+                }
+            }
+            NewClicks = new Click[Clicks.length + 1];
+            System.arraycopy(Clicks, 0, NewClicks, 0, Clicks.length);
+        }
+        else NewClicks = new Click[1];
+        NewClicks[NewClicks.length - 1] = MyClick;
+        ClickMap.put(aClass, NewClicks);
+        //            Log(ClickMap.toString());
+    }
+
+    public static void addItem(String Name, Click MyClick)
+    {
+        if (Name == null || MyClick == null) return;
+        String ClassName = Name + "ItemBuilder";
+
         if (Hook(ClassName))
         {
             Class<?> aClass = MethodFinder.GetClass(ClassName);
-//            Log(aClass + " " + MyClick);
-            Object[] NewItems;
-            Object MenuItem = XposedHelpers.newInstance(QQCustomMenuItemClass, MyClick.ItemID, MyClick.ItemName, Integer.MAX_VALUE - 1);
-//            Log(MenuItem.toString());
-            if (ItemMap.containsKey(aClass)) {
-                Object[] items = ItemMap.get(aClass);
-                for (Object item : items) {
-                    if (QQCustomMenuItemEquals(item, MenuItem)) return true;
-                }
-                NewItems = new Object[items.length + 1];
-                System.arraycopy(items, 0, NewItems, 0, items.length);
-            }
-            else NewItems = new Object[1];
-            NewItems[NewItems.length - 1] = MenuItem;
-            ItemMap.put(aClass, NewItems);
-//            Log(ItemMap.toString());
-
-            Click[] NewClicks;
-            if (ClickMap.containsKey(aClass)) {
-                Click[] Clicks = ClickMap.get(aClass);
-                for (Click click : Clicks) {
-                    if (click.equals(MyClick)) return true;
-                }
-                NewClicks = new Click[Clicks.length + 1];
-                System.arraycopy(Clicks, 0, NewClicks, 0, Clicks.length);
-            }
-            else NewClicks = new Click[1];
-            NewClicks[NewClicks.length - 1] = MyClick;
-            ClickMap.put(aClass, NewClicks);
-//            Log(ClickMap.toString());
+            addShow(aClass, MyClick.ItemName, MyClick.ItemID);
+            addClick(aClass, MyClick);
         }
-        return false;
+        else Log("HookError:" + ClassName);
+    }
+
+    public static void addItem(String[] ClassNames, Click MyClick)
+    {
+        if (ClassNames == null) return;
+        for (String ClassName : ClassNames)
+        {
+            addItem(ClassName, MyClick);
+        }
     }
 
     public static boolean QQCustomMenuItemEquals(Object obj1, Object obj2)
@@ -169,11 +197,9 @@ public class QQCustomMenuItemHook extends BaseHook{
         try {
             if (obj1.getClass().equals(QQCustomMenuItemClass) && obj2.getClass().equals(QQCustomMenuItemClass))
             {
-//                Field field1 = XposedHelpers.findField(QQCustomMenuItemClass, "a");
-//                String name1 = (String) field1.get(obj1);
-//                String name2 = (String) field1.get(obj2);
-                String name1 = (String) XposedHelpers.getObjectField(obj1, "a");
-                String name2 = (String) XposedHelpers.getObjectField(obj2, "a");
+                Field field1 = XposedHelpers.findField(QQCustomMenuItemClass, "a");
+                String name1 = (String) field1.get(obj1);
+                String name2 = (String) field1.get(obj2);
                 if (name1.equals(name2)) {
                     Field field2 = XposedHelpers.findField(QQCustomMenuItemClass, "b");
                     int id1 = (int) field2.get(obj1);
@@ -182,7 +208,7 @@ public class QQCustomMenuItemHook extends BaseHook{
                 }
             }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            Log("Error " + e);
         }
         return false;
     }
@@ -196,7 +222,7 @@ public class QQCustomMenuItemHook extends BaseHook{
         {
             ItemName = name;
             ItemID = id;
-            Log("New Click -> " + ItemName + ":" + ItemID);
+            Log("New " + this);
         }
 
         @Override
@@ -207,10 +233,18 @@ public class QQCustomMenuItemHook extends BaseHook{
             return ItemID == click.ItemID && ItemName.equals(click.ItemName);
         }
 
+        @NonNull
+        @Override
+        public String toString() {
+            return "Click{" +
+                    "ItemName='" + ItemName + '\'' +
+                    ", ItemID=" + ItemID +
+                    '}';
+        }
+
         public void run(XC_MethodHook.MethodHookParam param)
         {
-            Log( ItemName + ":" + ItemID + " -> Run");
-//            LogStackTrace(ItemName);
+            Log(this + " -> Run");
         }
 
     }

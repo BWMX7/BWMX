@@ -181,19 +181,16 @@ public class MethodFinder {
                 return FindClass(className.get());
             }
             case "TextItemBuilder": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.item.TextItemBuilder");
-                if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.activity.aio.item.TextItemBuilder";
+                return FindClass(className);
             }
             case "ReplyTextItemBuilder": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.item.ReplyTextItemBuilder");
-                if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.activity.aio.item.ReplyTextItemBuilder";
+                return FindClass(className);
             }
             case "MixedMsgItemBuilder": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.item.MixedMsgItemBuilder");
-                if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.activity.aio.item.MixedMsgItemBuilder";
+                return FindClass(className);
             }
             case "BaseBubbleBuilder$d": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.BaseBubbleBuilder$d");
@@ -265,6 +262,14 @@ public class MethodFinder {
 //            }
             case "BusinessHandlerFactory": {
                 String className = "com.tencent.mobileqq.app.BusinessHandlerFactory";
+                return FindClass(className);
+            }
+            case "BasePicItemBuilder": {
+                String className = "com.tencent.mobileqq.activity.aio.item.BasePicItemBuilder";
+                return FindClass(className);
+            }
+            case "PicItemBuilder": {
+                String className = "com.tencent.mobileqq.activity.aio.item.PicItemBuilder";
                 return FindClass(className);
             }
             default:
@@ -402,7 +407,8 @@ public class MethodFinder {
                 return FindMethod(classes, "setSelfBubbleId", int.class);
             }
             case "TextItemBuilder.Dialog":
-            case "MixedMsgItemBuilder.Dialog": {
+            case "MixedMsgItemBuilder.Dialog":
+            case "BasePicItemBuilder.Dialog":{
                 AtomicReference<String> methodName = new AtomicReference<>("a");
                 if (QQ_version >= 8845) methodName.set("o");
                 else if (QQ_version >= 8000) return null;
@@ -410,7 +416,8 @@ public class MethodFinder {
             }
             case "TextItemBuilder.Click":
             case "ReplyTextItemBuilder.Click":
-            case "MixedMsgItemBuilder.Click": {
+            case "MixedMsgItemBuilder.Click":
+            case "BasePicItemBuilder.Click":{
                 return FindMethod(classes, "a", int.class, Context.class, GetClass("ChatMessage"));
             }
         }
