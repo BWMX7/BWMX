@@ -27,6 +27,7 @@ public class QQCustomMenuItemHook extends BaseHook{
     private static final HashMap<Class<?>, Click[]> ClickMap = new HashMap<>();
 
     private static final Class<?> QQCustomMenuItemClass = MethodFinder.GetClass("QQCustomMenuItem");
+    private static final Class<?> BaseBubbleBuilderClass = MethodFinder.GetClass("BaseBubbleItemBuilder");
 
     static
     {
@@ -35,17 +36,24 @@ public class QQCustomMenuItemHook extends BaseHook{
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);
 
-                Class<?> aClass = param.thisObject.getClass();
-//                Log(aClass.toString());
+//                LogStackTrace("Show");
 
-                if (ItemMap.containsKey(aClass)) {
-                Object[] arr = (Object[]) param.getResult();
-                Object[] add = ItemMap.get(aClass);
-                Object[] ret = (Object[]) Array.newInstance(arr.getClass().getComponentType(),Array.getLength(arr) + Array.getLength(add));
-                System.arraycopy(arr, 0, ret, 0, Array.getLength(arr));
-                System.arraycopy(add, 0, ret, Array.getLength(arr), Array.getLength(add));
-//                Log(Arrays.toString(ret));
-                param.setResult(ret);
+                Class<?> aClass = param.thisObject.getClass();
+
+                while (aClass != null) {
+                    Log(aClass.toString());
+                    if (ItemMap.containsKey(aClass)) {
+                        Object[] arr = (Object[]) param.getResult();
+                        Object[] add = ItemMap.get(aClass);
+                        Object[] ret = (Object[]) Array.newInstance(arr.getClass().getComponentType(), Array.getLength(arr) + Array.getLength(add));
+                        System.arraycopy(arr, 0, ret, 0, Array.getLength(arr));
+                        System.arraycopy(add, 0, ret, Array.getLength(arr), Array.getLength(add));
+//                        Log(Arrays.toString(ret));
+                        param.setResult(ret);
+//                        return;
+                    }
+                    if (aClass.equals(BaseBubbleBuilderClass)) break;
+                    aClass = aClass.getSuperclass();
                 }
             }
         };
@@ -55,22 +63,28 @@ public class QQCustomMenuItemHook extends BaseHook{
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 super.afterHookedMethod(param);
 
+//                LogStackTrace("Click");
+
 //                Object[] objects = param.args;
 //                Log(Arrays.toString(objects));
 
                 Class<?> aClass = param.thisObject.getClass();
-//                Log(aClass.toString());
 
-                if (ClickMap.containsKey(aClass)) {
-                    int id = (int) param.args[0];
-                    for (Click click : ClickMap.get(aClass))
-                    {
-                        if (click.ItemID == id)
+                while (aClass != null) {
+                    Log(aClass.toString());
+                    if (ClickMap.containsKey(aClass)) {
+                        int id = (int) param.args[0];
+                        for (Click click : ClickMap.get(aClass))
                         {
-                            click.run(param);
-                            return;
+                            if (click.ItemID == id)
+                            {
+                                click.run(param);
+                                return;
+                            }
                         }
                     }
+                    if (aClass.equals(BaseBubbleBuilderClass)) break;
+                    aClass = aClass.getSuperclass();
                 }
             }
         };
@@ -125,12 +139,13 @@ public class QQCustomMenuItemHook extends BaseHook{
 //        return true;
 //    }
 
-    private static void addShow(Class<?> aClass, String ItemName, int ItemID)
+    private static void addShow(Class<?> aClass, Object MenuItem)
     {
 //            Log(aClass + " " + MyClick);
         Object[] NewItems;
-        Object MenuItem = XposedHelpers.newInstance(QQCustomMenuItemClass, ItemID, ItemName, Integer.MAX_VALUE - 1);
+
 //            Log(MenuItem.toString());
+
         Object[] items = ItemMap.get(aClass);
         if (items != null) {
             for (Object item : items) {
@@ -176,7 +191,7 @@ public class QQCustomMenuItemHook extends BaseHook{
         if (Hook(ClassName))
         {
             Class<?> aClass = MethodFinder.GetClass(ClassName);
-            addShow(aClass, MyClick.ItemName, MyClick.ItemID);
+            addShow(aClass, MyClick.MenuItem);
             addClick(aClass, MyClick);
         }
         else Log("HookError:" + ClassName);
@@ -217,11 +232,14 @@ public class QQCustomMenuItemHook extends BaseHook{
     {
         public String ItemName;
         public int ItemID;
+        public Object MenuItem;
+
 
         Click(String name,int id)
         {
             ItemName = name;
             ItemID = id;
+            MenuItem = XposedHelpers.newInstance(QQCustomMenuItemClass, ItemID, ItemName, Integer.MAX_VALUE - 1);
             Log("New " + this);
         }
 
@@ -230,15 +248,15 @@ public class QQCustomMenuItemHook extends BaseHook{
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Click click = (Click) o;
-            return ItemID == click.ItemID && ItemName.equals(click.ItemName);
+            return ItemID == click.ItemID || ItemName.equals(click.ItemName);
         }
 
         @NonNull
         @Override
         public String toString() {
-            return "Click{" +
-                    "ItemName='" + ItemName + '\'' +
-                    ", ItemID=" + ItemID +
+            return "MyClick{" +
+                    "ItemID=" + ItemID +
+                    ", " + MenuItem +
                     '}';
         }
 

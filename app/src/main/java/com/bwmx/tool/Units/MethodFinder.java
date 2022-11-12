@@ -272,6 +272,21 @@ public class MethodFinder {
                 String className = "com.tencent.mobileqq.activity.aio.item.PicItemBuilder";
                 return FindClass(className);
             }
+            case "BaseBubbleItemBuilder": {
+                String className = "com.tencent.mobileqq.activity.aio.BaseBubbleBuilder";
+                return FindClass(className);
+            }
+            case "QFileItemBuilder": {
+                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.item.QFileItemBuilder");
+                if (QQ_version >= 8845) {
+                    className.set("com.tencent.mobileqq.activity.aio.item.aw");
+                } else if (QQ_version >= 8000) return null;
+                return FindClass(className.get());
+            }
+            case "PttItemBuilder": {
+                String className = "com.tencent.mobileqq.activity.aio.item.PttItemBuilder";
+                return FindClass(className);
+            }
             default:
                 return FindClass(name);
         }
@@ -408,7 +423,9 @@ public class MethodFinder {
             }
             case "TextItemBuilder.Dialog":
             case "MixedMsgItemBuilder.Dialog":
-            case "BasePicItemBuilder.Dialog":{
+            case "BasePicItemBuilder.Dialog":
+            case "QFileItemBuilder.Dialog":
+            case "PttItemBuilder.Dialog":{
                 AtomicReference<String> methodName = new AtomicReference<>("a");
                 if (QQ_version >= 8845) methodName.set("o");
                 else if (QQ_version >= 8000) return null;
@@ -417,7 +434,10 @@ public class MethodFinder {
             case "TextItemBuilder.Click":
             case "ReplyTextItemBuilder.Click":
             case "MixedMsgItemBuilder.Click":
-            case "BasePicItemBuilder.Click":{
+            case "BasePicItemBuilder.Click":
+            case "BaseBubbleItemBuilder.Click":
+            case "QFileItemBuilder.Click":
+            case "PttItemBuilder.Click":{
                 return FindMethod(classes, "a", int.class, Context.class, GetClass("ChatMessage"));
             }
         }

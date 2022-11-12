@@ -9,7 +9,6 @@ import com.bwmx.tool.Hook.AddPluginToolHook;
 import com.bwmx.tool.Hook.BaseHook;
 import com.bwmx.tool.Hook.BubbleTextColorHook;
 import com.bwmx.tool.Hook.ForwardRecentDisplayHook;
-import com.bwmx.tool.Hook.MiniAppLogin;
 import com.bwmx.tool.Hook.MsgListScrollerHook;
 import com.bwmx.tool.Hook.SignatureCheckHook;
 import com.bwmx.tool.Hook.StructMsgHook;
@@ -116,7 +115,6 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                                 super.afterHookedMethod(param);
 
                                                 SignatureCheckHook.Init1();
-                                                MiniAppLogin.Hook();
                                                 TroopMemberListHook.Hook();
                                                 MsgListScrollerHook.Init();
                                                 BubbleTextColorHook.Init();

@@ -1,8 +1,5 @@
 package com.bwmx.tool.Hook;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -95,8 +92,8 @@ public class BubbleTextColorHook extends BaseHook{
                 }
             }
         };
-        SetColor setColor = new SetColor("复制ID", 3200);
-        QQCustomMenuItemHook.addItem(new String[]{"Text", "ReplyText", "MixedMsg"}, setColor);
+        SetColor setColor = new SetColor("气泡ID", 3200);
+        QQCustomMenuItemHook.addItem(new String[]{"Text", "MixedMsg"}, setColor);
     }
 
     public static void Init()
@@ -150,10 +147,13 @@ public class BubbleTextColorHook extends BaseHook{
 //            LogStackTrace(ItemName);
             Integer bubbleID = (Integer) MethodFinder.BusinessHandler("SVIP_HANDLER", "getBubbleIdFromMessageRecord", param.args[2]);
 //            Log("BubbleID:" + bubbleID);
-            ClipboardManager clipboardManager = (ClipboardManager)Main.AppContext.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText(null, bubbleID != null ? bubbleID.toString() : null);
-            clipboardManager.setPrimaryClip(clipData);
-            PluginTool.ShowToast("气泡ID" + bubbleID + "已复制");
+            if (bubbleID == null) {
+                PluginTool.ShowToast("气泡ID获取失败");
+            }
+            else {
+                PluginTool.CopyString(bubbleID);
+                PluginTool.ShowToast("气泡ID\"" + bubbleID + "\"已复制");
+            }
         }
     }
 

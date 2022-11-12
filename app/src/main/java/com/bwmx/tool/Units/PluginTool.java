@@ -1,5 +1,8 @@
 package com.bwmx.tool.Units;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Handler;
@@ -47,5 +50,13 @@ public class PluginTool {
 
     public static <T> void ShowToast(T Value){
         new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(Main.AppContext, Value.toString(), Toast.LENGTH_SHORT).show());
+    }
+
+    public static <T> void CopyString(T Value)
+    {
+        if (Value == null) return;
+        ClipboardManager clipboardManager = (ClipboardManager)Main.AppContext.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText(null, Value.toString());
+        clipboardManager.setPrimaryClip(clipData);
     }
 }
