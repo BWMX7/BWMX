@@ -10,6 +10,7 @@ import com.bwmx.tool.Hook.BaseHook;
 import com.bwmx.tool.Hook.BubbleTextColorHook;
 import com.bwmx.tool.Hook.ForwardRecentDisplayHook;
 import com.bwmx.tool.Hook.MsgListScrollerHook;
+import com.bwmx.tool.Hook.PttRedPacketFlagHook;
 import com.bwmx.tool.Hook.SignatureCheckHook;
 import com.bwmx.tool.Hook.StructMsgHook;
 import com.bwmx.tool.Hook.TroopMemberListHook;
@@ -118,7 +119,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                                 TroopMemberListHook.Hook();
                                                 MsgListScrollerHook.Init();
                                                 BubbleTextColorHook.Init();
-
+                                                PttRedPacketFlagHook.Init();
                                             }
                                         });
                                     }

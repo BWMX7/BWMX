@@ -66,9 +66,12 @@ public class BaseHook {
 
     public static boolean ChangeSwitch(Boolean newSwitch, Boolean oldSwitch)
     {
-        if (newSwitch != null) return newSwitch;
-        else if (oldSwitch != null) return !oldSwitch;
-        else return true;
+        boolean change;
+        if (newSwitch != null) change = newSwitch;
+        else if (oldSwitch != null) change = !oldSwitch;
+        else change = true;
+        if (change != Boolean.TRUE.equals(oldSwitch)) Log("", "ChangeSwitch To " + change);
+        return change;
     }
 
     public static boolean PutSwitch(String Name, boolean Switch)
