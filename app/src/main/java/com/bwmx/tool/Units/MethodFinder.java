@@ -47,7 +47,7 @@ public class MethodFinder {
 
 
 
-    public static Class<?> FindClass(String className) {
+    private static Class<?> FindClass(String className) {
         if (className == null) return null;
 //        FileUnits.writelog("FindClass " + className);
         Class<?> classIfExists = XposedHelpers.findClassIfExists(className, Main.mLoader);
@@ -58,7 +58,7 @@ public class MethodFinder {
         }
     }
 
-    public static Method FindMethod(Class<?> classes, String methodName, Object... obj)
+    private static Method FindMethod(Class<?> classes, String methodName, Object... obj)
     {
 //        FileUnits.writelog("FindMethod " + methodName + "" + Arrays.toString(obj) + " from " + classes);
         if (classes != null) {
@@ -73,7 +73,7 @@ public class MethodFinder {
     }
 
 
-    public static Class<?> FindMyClass(String name)
+    private static Class<?> FindMyClass(String name)
     {
         if (name == null) return null;
 //        FileUnits.writelog("FindMyClass " + name);
@@ -287,6 +287,18 @@ public class MethodFinder {
                 String className = "com.tencent.mobileqq.activity.aio.item.PttItemBuilder";
                 return FindClass(className);
             }
+            case "BaseQQMessageFacade": {
+                String className = "com.tencent.imcore.message.BaseQQMessageFacade";
+                return FindClass(className);
+            }
+            case "MessageRecord": {
+                String className = "com.tencent.mobileqq.data.MessageRecord";
+                return FindClass(className);
+            }
+            case "BusinessObserver": {
+                String className = "com.tencent.mobileqq.app.BusinessObserver";
+                return FindClass(className);
+            }
             default:
                 return FindClass(name);
         }
@@ -294,7 +306,7 @@ public class MethodFinder {
 
 
     @Nullable
-    public static Method FindMyMethod(String classname, String methodname)
+    private static Method FindMyMethod(String classname, String methodname)
     {
         Class<?> classes = GetClass(classname);
         if (classes == null) return null;
@@ -439,6 +451,15 @@ public class MethodFinder {
             case "QFileItemBuilder.Click":
             case "PttItemBuilder.Click":{
                 return FindMethod(classes, "a", int.class, Context.class, GetClass("ChatMessage"));
+            }
+            case "BaseQQMessageFacade.SendMessage":{
+                AtomicReference<String> methodName = new AtomicReference<>("n0");
+                if (QQ_version >= 8845) methodName.set("W0");
+                if (QQ_version < 8845) return null;
+                return FindMethod(classes, methodName.get(), GetClass("MessageRecord"), GetClass("BusinessObserver"), boolean.class);
+            }
+            case "BaseQQMessageFacade.AddToMsgList":{
+                return FindMethod(classes, "c", GetClass("MessageRecord"), String.class);
             }
         }
         return null;

@@ -45,9 +45,9 @@ public class FileUnits {
     }
 
     public synchronized static boolean writelog(Object log) {
+        if (String.valueOf(log).toLowerCase(Locale.ROOT).contains("error")) PluginTool.ShowLongToast(log);
         String log2 = "[" + Main.ProcessName + "]" + log;
         XposedBridge.log("[萌块]" + log2);
-        if (log2.toLowerCase(Locale.ROOT).contains("error")) PluginTool.ShowToast(log2);
         String data = "[" + GetNowTime("MM-dd HH:mm:ss.SS") + "]" + log2;
         try {
             File file = new File(Path, "log.txt");

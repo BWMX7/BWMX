@@ -5,11 +5,13 @@ import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bwmx.tool.Main;
 import com.bwmx.tool.Units.MethodFinder;
 import com.bwmx.tool.Units.PluginTool;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Hashtable;
 
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
@@ -21,8 +23,7 @@ public class AddPluginToolHook extends BaseHook{
     protected static XC_MethodHook MethodHook1;
     protected static XC_MethodHook.Unhook Unhook1;
 
-    static
-    {
+    static {
         MethodHook1 = new XC_MethodReplacement() {
             @Override
             protected Object replaceHookedMethod(MethodHookParam param) {
@@ -49,8 +50,7 @@ public class AddPluginToolHook extends BaseHook{
     }
 
     @Nullable
-    private static Object[] AddPlugin(@NonNull String name, Object[] objArr)
-    {
+    private static Object[] AddPlugin(@NonNull String name, Object[] objArr) {
         Object[] obj = new Object[1];
         switch (name) {
             case "CheckLoad":
@@ -89,17 +89,14 @@ public class AddPluginToolHook extends BaseHook{
                 else if (change && !VasSwitcherHook.Switch2) obj[0] = VasSwitcherHook.ChangeSwitch2(true);
                 else if (!change && VasSwitcherHook.Switch2) obj[0] = VasSwitcherHook.ChangeSwitch2(false);
                 break;
-//            case "Tool" :
-//                try {
-//                    Field field1 = XposedHelpers.findField(objArr[0].getClass(), "javaObject");
-//                    Log(field1.toString());
-//                    Object obj2 = field1.get(objArr[0]);
-//                    XposedHelpers.callMethod(obj2, "Toast", "萌块便捷设置与萌块通讯成功");
-//                    obj[0] = "成功";
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
+            case "Tool" :
+                ClassLoader classLoader = objArr[0].getClass().getClassLoader();
+                Class<?> aClass = XposedHelpers.findClassIfExists("bsh.classpath.BshLoaderManager",classLoader);
+                XposedHelpers.callStaticMethod(aClass,"addClassLoader", classLoader);
+                XposedHelpers.callStaticMethod(aClass,"addClassLoader", Main.HookSwitches.getClass().getClassLoader());
+                obj[0] = "成功";
+                Log(XposedHelpers.getStaticObjectField(aClass, "loaders"));
+                break;
 //            case "RestartLoad" :
 //                try {
 //                    Field field1 = XposedHelpers.findField(objArr[0].getClass(), "javaObject");
@@ -130,6 +127,10 @@ public class AddPluginToolHook extends BaseHook{
                 QQCustomMenuItemHook.addItem((String[]) objArr[4], tool);
                 obj[0] = "成功";
                 break;
+            case "OnSend" :
+                PluginCallBack pluginCallBack = new PluginCallBack(objArr[0], (String) objArr[1]);
+                obj[0] = SendMsgHook.addCallBack(pluginCallBack);
+                break;
             default:
                 return objArr;
         }
@@ -137,27 +138,51 @@ public class AddPluginToolHook extends BaseHook{
         return obj;
     }
 
-    private static class Tool extends QQCustomMenuItemHook.Click
-    {
-        Object Plugin;
-        Object BshMethod;
-        Object Interpreter;
+     private static class Tool extends QQCustomMenuItemHook.Click {
+        PluginCallBack pluginCallBack;
 
         Tool(Object plugin, String bshMethodName, String name, int id) {
             super(name, id);
-            Plugin = plugin;
-            Object NameSpace = XposedHelpers.getObjectField(Plugin, "namespace");
-            BshMethod = XposedHelpers.callMethod(NameSpace, "getMethod", bshMethodName, new Class[]{Object.class});
-            Interpreter = XposedHelpers.getObjectField(Plugin, "declaringInterpreter");
-            Log(BshMethod + " -> " + Interpreter);
+            pluginCallBack = new PluginCallBack(plugin, bshMethodName);
         }
 
         @Override
         public void run(XC_MethodHook.MethodHookParam param) {
-            if (BshMethod == null || Interpreter == null || param == null) return;
+            if (param == null) return;
             Object msg = param.args[2];
-            Log(this + " -> " + msg);
-            XposedHelpers.callMethod(BshMethod, "invoke", new Object[]{msg}, Interpreter);
+            Log(msg);
+            Log(pluginCallBack.onMsg(msg));
         }
     }
+
+    private static class PluginCallBack extends SendMsgHook.CallBack {
+        Object Plugin;
+        Object NameSpace;
+        Object BshMethod;
+        Object Interpreter;
+
+        PluginCallBack(Object plugin, String bshMethodName) {
+            super("Plugin_" + bshMethodName);
+            Plugin = plugin;
+            NameSpace = XposedHelpers.getObjectField(Plugin, "namespace");
+            BshMethod = XposedHelpers.callMethod(NameSpace, "getMethod", bshMethodName, new Class[]{Object.class});
+            Interpreter = XposedHelpers.getObjectField(Plugin, "declaringInterpreter");
+            Log(this + " -> " + BshMethod);
+        }
+
+        @Override
+        public String onMsg(Object msg) {
+            if (NameSpace == null || BshMethod == null || Interpreter == null) return Remove;
+            Object methods = XposedHelpers.getObjectField(NameSpace, "methods");
+//            Log(methods);
+            if (methods == null) return Remove;
+            if (!(methods instanceof Hashtable)) return Remove;
+//            if (!((Hashtable<?, ?>)methods).contains(BshMethod)) return Remove;
+
+            super.onMsg(msg);
+            if (msg == null) return Null;
+            return String.valueOf(XposedHelpers.callMethod(BshMethod, "invoke", new Object[]{msg}, Interpreter));
+        }
+    }
+
 }

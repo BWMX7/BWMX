@@ -49,14 +49,17 @@ public class PluginTool {
     }
 
     public static <T> void ShowToast(T Value){
-        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(Main.AppContext, Value.toString(), Toast.LENGTH_SHORT).show());
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(Main.AppContext, String.valueOf(Value), Toast.LENGTH_SHORT).show());
+    }
+    public static <T> void ShowLongToast(T Value){
+        new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(Main.AppContext, String.valueOf(Value), Toast.LENGTH_LONG).show());
     }
 
     public static <T> void CopyString(T Value)
     {
         if (Value == null) return;
         ClipboardManager clipboardManager = (ClipboardManager)Main.AppContext.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText(null, Value.toString());
+        ClipData clipData = ClipData.newPlainText(null, String.valueOf(Value));
         clipboardManager.setPrimaryClip(clipData);
     }
 }
