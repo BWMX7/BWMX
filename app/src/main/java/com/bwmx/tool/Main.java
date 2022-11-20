@@ -105,6 +105,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                     VasSwitcherHook.Init2();
                                     StructMsgHook.Hook();
                                     ForwardRecentDisplayHook.Init();
+                                    PttRedPacketFlagHook.Init();
 //                       VipColorNickHook.Hook();
 
                                     Method MethodIfExists3 = MethodFinder.GetMethod("HelperProvider", "init");
@@ -119,7 +120,6 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                                 TroopMemberListHook.Hook();
                                                 MsgListScrollerHook.Init();
                                                 BubbleTextColorHook.Init();
-                                                PttRedPacketFlagHook.Init();
                                             }
                                         });
                                     }

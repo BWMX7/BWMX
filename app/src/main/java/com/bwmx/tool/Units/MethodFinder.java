@@ -299,6 +299,17 @@ public class MethodFinder {
                 String className = "com.tencent.mobileqq.app.BusinessObserver";
                 return FindClass(className);
             }
+            case "MessageForPtt": {
+                String className = "com.tencent.mobileqq.data.MessageForPtt";
+                return FindClass(className);
+            }
+            case "PttItemBuilder$Holder": {
+                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.item.PttItemBuilder$Holder");
+                if (QQ_version >= 8845) {
+                    className.set("com.tencent.mobileqq.activity.aio.item.PttItemBuilder$c");
+                } else if (QQ_version >= 8000) return null;
+                return FindClass(className.get());
+            }
             default:
                 return FindClass(name);
         }
@@ -459,7 +470,18 @@ public class MethodFinder {
                 return FindMethod(classes, methodName.get(), GetClass("MessageRecord"), GetClass("BusinessObserver"), boolean.class);
             }
             case "BaseQQMessageFacade.AddToMsgList":{
-                return FindMethod(classes, "c", GetClass("MessageRecord"), String.class);
+                AtomicReference<String> methodName = new AtomicReference<>("a");
+                if (QQ_version >= 8845) methodName.set("c");
+                if (QQ_version < 8845) return null;
+                return FindMethod(classes, methodName.get(), GetClass("MessageRecord"), String.class);
+            }
+            case "PttItemBuilder.Time":{
+                AtomicReference<String> methodName = new AtomicReference<>("a");
+                if (QQ_version >= 9570) methodName.set("S0");
+                else if (QQ_version >= 9280) methodName.set("T0");
+                else if (QQ_version >= 8845) methodName.set("V0");
+                else if (QQ_version >= 8000) return null;
+                return FindMethod(classes, methodName.get(), GetClass("PttItemBuilder$Holder"), GetClass("MessageForPtt"));
             }
         }
         return null;
