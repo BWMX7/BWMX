@@ -41,7 +41,7 @@ public class QQCustomMenuItemHook extends BaseHook{
                 Class<?> aClass = param.thisObject.getClass();
 
                 while (aClass != null) {
-                    Log(aClass.toString());
+//                    Log(aClass.toString());
                     if (ItemMap.containsKey(aClass)) {
                         Object[] arr = (Object[]) param.getResult();
                         Object[] add = ItemMap.get(aClass);
@@ -71,7 +71,7 @@ public class QQCustomMenuItemHook extends BaseHook{
                 Class<?> aClass = param.thisObject.getClass();
 
                 while (aClass != null) {
-                    Log(aClass.toString());
+//                    Log(aClass.toString());
                     if (ClickMap.containsKey(aClass)) {
                         int id = (int) param.args[0];
                         for (Click click : ClickMap.get(aClass))

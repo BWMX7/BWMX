@@ -1,5 +1,8 @@
 package com.bwmx.tool.Units;
 
+import static com.bwmx.tool.Units.HostInfo.QQVersion;
+import static com.bwmx.tool.Units.HostInfo.getVerCode;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -77,7 +80,7 @@ public class MethodFinder {
     {
         if (name == null) return null;
 //        FileUnits.writelog("FindMyClass " + name);
-        int QQ_version= HostInfo.getVerCode();
+        int QQ_version = getVerCode();
         switch (name) {
             case "QFixApplication": {
                 String className = "com.tencent.mobileqq.qfix.QFixApplication";
@@ -97,17 +100,11 @@ public class MethodFinder {
             }
             case "HelperProvider": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.helper.HelperProvider");//8.8.*
-                if (QQ_version >= 9570) {//8.9.18
-                    className.set("com.tencent.mobileqq.activity.aio.helper.bx");
-                }else if (QQ_version >= 9280) {//8.9.13-8.9.15(9425)
-                    className.set("com.tencent.mobileqq.activity.aio.helper.bw");
-                } else if (QQ_version >= 9135) {//8.9.10
-                    className.set("com.tencent.mobileqq.activity.aio.helper.bv");
-                } else if (QQ_version >= 8995) {//8.9.8
-                    className.set("com.tencent.mobileqq.activity.aio.helper.bu");
-                } else if (QQ_version >= 8845) {//8.9.5
-                    className.set("com.tencent.mobileqq.activity.aio.helper.bs");
-                } else if (QQ_version >= 8120) return null;//8.8.90
+                if (QQ_version >= QQVersion.QQ8_9_18) className.set("com.tencent.mobileqq.activity.aio.helper.bx");
+                else if (QQ_version >= QQVersion.QQ8_9_13) className.set("com.tencent.mobileqq.activity.aio.helper.bw");
+                else if (QQ_version >= QQVersion.QQ8_9_10) className.set("com.tencent.mobileqq.activity.aio.helper.bv");
+                else if (QQ_version >= QQVersion.QQ8_9_8) className.set("com.tencent.mobileqq.activity.aio.helper.bu");
+                else if (QQ_version >= QQVersion.QQ8_8_90) className.set("com.tencent.mobileqq.activity.aio.helper.bs");
                 return FindClass(className.get());
             }
             case "StructMsgForGeneralShare": {
@@ -131,40 +128,36 @@ public class MethodFinder {
                 return FindClass(className);
             }
             case "AuthCheck": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.open.agent.auth.presenter.b$f");
-                return FindClass(className.get());
+                String className = "com.tencent.open.agent.auth.presenter.b$f";
+                return FindClass(className);
             }
             case "VirtualCheck": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.open.virtual.f");
-                return FindClass(className.get());
+                String className = "com.tencent.open.virtual.f";
+                return FindClass(className);
             }
             case "AuthCheckData": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.open.agent.b.b");
-                return FindClass(className.get());
+                String className = "com.tencent.open.agent.b.b";
+                return FindClass(className);
             }
             case "VipIconTask": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.utils.VipUtils$UpdateRecentEfficientVipIconTask");
-                if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.utils.VipUtils$UpdateRecentEfficientVipIconTask";
+                return FindClass(className);
             }
             case "RecentTask": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.recent.o");
-                if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.activity.recent.o";
+                return FindClass(className);
             }
             case "RecentBaseData": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.recent.RecentBaseData");
-                if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+               String className = "com.tencent.mobileqq.activity.recent.RecentBaseData";
+                return FindClass(className);
             }
             case "BaseActivity": {
                 String className = "com.tencent.mobileqq.app.BaseActivity";
                 return FindClass(className);
             }
             case "VipIconView": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.recent.o$a");
-                if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.activity.recent.o$a";
+                return FindClass(className);
             }
             case "QRoute": {
                 String className = "com.tencent.mobileqq.qroute.QRoute";
@@ -172,13 +165,11 @@ public class MethodFinder {
             }
             case "IVipColorName": {
                 String className = "com.tencent.mobileqq.vip.api.IVipColorName";
-                if (QQ_version < 9280) return null;
                 return FindClass(className);
             }
             case "VipData": {
-                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.vip.api.VipData");
-                if (QQ_version < 9280) return null;
-                return FindClass(className.get());
+                String className = "com.tencent.mobileqq.vip.api.VipData";
+                return FindClass(className);
             }
             case "TextItemBuilder": {
                 String className = "com.tencent.mobileqq.activity.aio.item.TextItemBuilder";
@@ -194,7 +185,7 @@ public class MethodFinder {
             }
             case "BaseBubbleBuilder$d": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.BaseBubbleBuilder$d");
-                if (QQ_version < 9280) return null;
+//                if (QQ_version < QQVersion.QQ8_9_5) return null;
                 return FindClass(className.get());
             }
             case "ChatMessage": {
@@ -203,12 +194,12 @@ public class MethodFinder {
             }
             case "BubbleInfo": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.bubble.d");
-                if (QQ_version < 9280) return null;
+//                if (QQ_version < QQVersion.QQ8_9_5) return null;
                 return FindClass(className.get());
             }
             case "TextItemBuilder$h": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.item.TextItemBuilder$h");
-                if (QQ_version < 9280) return null;
+//                if (QQ_version < QQVersion.QQ8_9_5) return null;
                 return FindClass(className.get());
             }
             case "ThemeHandler": {
@@ -217,9 +208,7 @@ public class MethodFinder {
             }
             case "NormalNightModeHandler": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.simpleui.NormalNightModeHandler");
-                if (QQ_version >= 8845) {
-                    className.set("com.tencent.mobileqq.simpleui.a");
-                } else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) className.set("com.tencent.mobileqq.simpleui.a");
                 return FindClass(className.get());
             }
             case "RecentUser": {
@@ -236,9 +225,7 @@ public class MethodFinder {
             }
             case "GetStrangerVasInfoHandler": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.vas.handler.GetStrangerVasInfoHandler");
-                if (QQ_version >= 8845) {
-                    className.set("com.tencent.mobileqq.vas.e.a");
-                } else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) className.set("com.tencent.mobileqq.vas.e.a");
                 return FindClass(className.get());
             }
             case "oidb_0x5eb$UdcUinData": {
@@ -251,14 +238,12 @@ public class MethodFinder {
             }
             case "QQCustomMenuItem": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.utils.dialogutils.QQCustomMenuItem");
-                if (QQ_version >= 8845) {
-                    className.set("com.tencent.mobileqq.utils.dialogutils.b");
-                } else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) className.set("com.tencent.mobileqq.utils.dialogutils.b");
                 return FindClass(className.get());
             }
 //            case "BaseAuthorityPresenter": {
-//                AtomicReference<String> className = new AtomicReference<>("com.tencent.open.agent.auth.presenter.BaseAuthorityPresenter");
-//                return FindClass(className.get());
+//                String className = "com.tencent.open.agent.auth.presenter.BaseAuthorityPresenter";
+//                return FindClass(className);
 //            }
             case "BusinessHandlerFactory": {
                 String className = "com.tencent.mobileqq.app.BusinessHandlerFactory";
@@ -278,9 +263,7 @@ public class MethodFinder {
             }
             case "QFileItemBuilder": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.item.QFileItemBuilder");
-                if (QQ_version >= 8845) {
-                    className.set("com.tencent.mobileqq.activity.aio.item.aw");
-                } else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) className.set("com.tencent.mobileqq.activity.aio.item.aw");
                 return FindClass(className.get());
             }
             case "PttItemBuilder": {
@@ -305,9 +288,7 @@ public class MethodFinder {
             }
             case "PttItemBuilder$Holder": {
                 AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.activity.aio.item.PttItemBuilder$Holder");
-                if (QQ_version >= 8845) {
-                    className.set("com.tencent.mobileqq.activity.aio.item.PttItemBuilder$c");
-                } else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) className.set("com.tencent.mobileqq.activity.aio.item.PttItemBuilder$c");
                 return FindClass(className.get());
             }
             default:
@@ -322,7 +303,7 @@ public class MethodFinder {
         Class<?> classes = GetClass(classname);
         if (classes == null) return null;
 //        FileUnits.writelog("FindMyMethod " + methodname + " from " + classes);
-        int QQ_version=HostInfo.getVerCode();
+        int QQ_version = getVerCode();
         switch (classname + "." + methodname) {
             case "QFixApplication.attachBaseContext": {
                 return FindMethod(classes, "attachBaseContext", Context.class);
@@ -333,51 +314,41 @@ public class MethodFinder {
             case "QQAppInterface.unitTestLog": {
                 return FindMethod(classes, "unitTestLog", String.class, Object[].class);
             }
-//            case "AddMyClassloader": {
-//                AtomicReference<String> className = new AtomicReference<>("com.tencent.mobileqq.qfix.AndroidNClassLoader");
-//                AtomicReference<String> methodName = new AtomicReference<>("inject");
-//                if (QQ_version < 8845) return null;
-//                return FindMethod(className.get(), methodName.get(), PathClassLoader.class, Application.class);
-//            }
             case "HelperProvider.init": {
                 AtomicReference<String> methodName = new AtomicReference<>("b");
-                if (QQ_version >= 8845) methodName.set("M");
-                else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("M");
                 return FindMethod(classes, methodName.get(), GetClass("BaseChatPie"));
             }
 //            case "StructMsgFactory.init": {
 //                AtomicReference<String> methodName = new AtomicReference<>("a");
-//                if (QQ_version >= 8845) methodName.set("f");
+//                if (QQ_version >= QQVersion.QQ8_9_5) methodName.set("f");
 //                else if (QQ_version >= 8000) return null;
 //                return FindMethod(classes, methodName.get(), Bundle.class);
 //            }
             case "ForwardShareByServerHelper.SignatureData": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 8845) methodName.set("F");
-                else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("F");
                 return FindMethod(classes, methodName.get(), Context.class, String.class);
             }
             case "TroopMemberListAdapter.init":
             case "MsgListScroller.ScrollTo0": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 8845) methodName.set("g");
-                else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("g");
                 return FindMethod(classes, methodName.get());
             }
             case "MsgListScroller.scroll": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 8845) methodName.set("h");
-                else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("h");
                 return FindMethod(classes, methodName.get(), long.class);
             }
             case "VirtualCheck.Sign": {
                 AtomicReference<String> methodName = new AtomicReference<>("j");
-                if (QQ_version < 8845) return null;
+//                if (QQ_version < QQVersion.QQ8_9_5) return null;
                 return FindMethod(classes, methodName.get(),String.class);
             }
             case "AuthCheck.check": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version < 8845) return null;
+//                if (QQ_version < 8845) return null;
                 return FindMethod(classes, methodName.get(),boolean.class, int.class, GetClass("AuthCheckData"));
             }
 //            case "VipIconTask.ColorNick": {
@@ -387,43 +358,41 @@ public class MethodFinder {
 //            }
             case "RecentTask.ColorNick": {
                 AtomicReference<String> methodName = new AtomicReference<>("m");
-                if (QQ_version < 9280) return null;
+//                if (QQ_version < 9280) return null;
                 return FindMethod(classes, methodName.get(), GetClass("RecentBaseData"), GetClass("BaseActivity"), GetClass("VipIconView"), float.class);
             }
             case "VipData.getColorName": {
                 AtomicReference<String> methodName = new AtomicReference<>("getColorName");
-//                if (QQ_version < 8845) return null;
+//                if (QQ_version < QQVersion.QQ8_9_5) return null;
                 return FindMethod(classes, methodName.get());
             }
             case "BaseAuthorityPresenter.Parse": {
                 AtomicReference<String> methodName = new AtomicReference<>("R");
-//                if (QQ_version < 8845) return null;
+//                if (QQ_version < QQVersion.QQ8_9_5) return null;
                 return FindMethod(classes, methodName.get(), GetClass("AuthCheckData"));
             }
             case "TextItemBuilder.Color":
             case "ReplyTextItemBuilder.Color":
             case "MixedMsgItemBuilder.Color": {
                 AtomicReference<String> methodName = new AtomicReference<>("n0");
-                if (QQ_version >= 9570) methodName.set("m0");
-                if (QQ_version < 8845) return null;
+                if (QQ_version >= QQVersion.QQ8_9_18) methodName.set("m0");
+//                if (QQ_version < QQVersion.QQ8_9_5) return null;
                 return FindMethod(classes, methodName.get(), GetClass("BaseBubbleBuilder$d"), View.class, GetClass("ChatMessage"), GetClass("BubbleInfo"));
             }
             case "ThemeHandler.SwitchTheme": {
                 AtomicReference<String> methodName = new AtomicReference<>("b");
-                if (QQ_version >= 9570) methodName.set("b5");
+                if (QQ_version >= QQVersion.QQ8_9_18) methodName.set("b5");
                 else if (QQ_version >= 9425) methodName.set("d5");
                 else if (QQ_version >= 9280) methodName.set("g5");
-                else if (QQ_version >= 8845) methodName.set("i5");
-                else if (QQ_version >= 8000) return null;
+                else if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("i5");
                 return FindMethod(classes, methodName.get(), String.class, String.class);
             }
             case "NormalNightModeHandler.SwitchTheme": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 9570) methodName.set("Q4");
-                else if (QQ_version >= 9425) methodName.set("S4");
-                else if (QQ_version >= 9280) methodName.set("V4");
-                else if (QQ_version >= 8845) methodName.set("X4");
-                else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_9_18) methodName.set("Q4");
+                else if (QQ_version >= QQVersion.QQ8_9_15) methodName.set("S4");
+                else if (QQ_version >= QQVersion.QQ8_9_13) methodName.set("V4");
+                else if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("X4");
                 return FindMethod(classes, methodName.get(), int.class);
             }
             case "ForwardRecentActivity.getRecentForwardListWithoutShowUp": {
@@ -431,14 +400,12 @@ public class MethodFinder {
             }
             case "ForwardSelectionRecentFriendGridAdapter.DisplayData": {
                 AtomicReference<String> methodName = new AtomicReference<>("b");
-                if (QQ_version >= 8845) methodName.set("e");
-                else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("e");
                 return FindMethod(classes, methodName.get(), List.class);
             }
             case "GetStrangerVasInfoHandler.SwitchBubble": {
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 8845) methodName.set("d");
-                else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("d");
                 return FindMethod(classes, methodName.get(), GetClass("oidb_0x5eb$UdcUinData"));
             }
             case "SVIPHandler.setSelfBubbleId": {
@@ -450,8 +417,7 @@ public class MethodFinder {
             case "QFileItemBuilder.Dialog":
             case "PttItemBuilder.Dialog":{
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 8845) methodName.set("o");
-                else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("o");
                 return FindMethod(classes, methodName.get(), View.class);
             }
             case "TextItemBuilder.Click":
@@ -465,22 +431,19 @@ public class MethodFinder {
             }
             case "BaseQQMessageFacade.SendMessage":{
                 AtomicReference<String> methodName = new AtomicReference<>("n0");
-                if (QQ_version >= 8845) methodName.set("W0");
-                if (QQ_version < 8845) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("W0");
                 return FindMethod(classes, methodName.get(), GetClass("MessageRecord"), GetClass("BusinessObserver"), boolean.class);
             }
             case "BaseQQMessageFacade.AddToMsgList":{
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 8845) methodName.set("c");
-                if (QQ_version < 8845) return null;
+                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("c");
                 return FindMethod(classes, methodName.get(), GetClass("MessageRecord"), String.class);
             }
             case "PttItemBuilder.Time":{
                 AtomicReference<String> methodName = new AtomicReference<>("a");
-                if (QQ_version >= 9570) methodName.set("S0");
-                else if (QQ_version >= 9280) methodName.set("T0");
-                else if (QQ_version >= 8845) methodName.set("V0");
-                else if (QQ_version >= 8000) return null;
+                if (QQ_version >= QQVersion.QQ8_9_18) methodName.set("S0");
+                else if (QQ_version >= QQVersion.QQ8_9_13) methodName.set("T0");
+                else if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("V0");
                 return FindMethod(classes, methodName.get(), GetClass("PttItemBuilder$Holder"), GetClass("MessageForPtt"));
             }
         }
@@ -531,6 +494,7 @@ public class MethodFinder {
         String handlerName = (String) XposedHelpers.getStaticObjectField(classIfExists, HandlerName);
         if (TextUtils.isEmpty(handlerName)) return null;
         Object handler = XposedHelpers.callMethod(Main.Runtime, "getBusinessHandler", handlerName);
+        if (handler == null) return null;
         return XposedHelpers.callMethod(handler, methodName, objects);
     }
 

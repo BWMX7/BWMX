@@ -34,4 +34,18 @@ public class HostInfo {
     }
     public static String getVersion(){return Version;}
 
+    public static class QQVersion
+    {
+//        public static int QQ8_8_68 = 8000;
+        public static int QQ8_8_90 = 8120;
+        public static int QQ8_9_5 = 8845;
+        public static int QQ8_9_8 = 8995;
+        public static int QQ8_9_10 = 9135;
+        public static int QQ8_9_13 = 9280;
+        public static int QQ8_9_15 = 9425;
+        public static int QQ8_9_18 = 9570;
+        public static int QQ8_9_19 = 9580;
+        public static int QQ8_9_20 = 9715;
+    }
+
 }

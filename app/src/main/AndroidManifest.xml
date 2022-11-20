@@ -13,7 +13,7 @@
             android:value="true" />
         <meta-data
             android:name="xposeddescription"
-            android:value="卑微萌新的第一个模块\n用于配合点歌脚本发送卡片使用\n适配QQ\n8.8.68-8.8.90,8.9.5-8.9.15\n请勿倒卖或用于违法违禁行为" />
+            android:value="卑微萌新的第一个模块\n用于配合点歌脚本发送卡片使用\n适配QQ\n8.8.68-8.8.88,8.9.5-8.9.20\n请勿倒卖或用于违法违禁行为" />
         <meta-data
             android:name="xposedminversion"
             android:value="54" />
