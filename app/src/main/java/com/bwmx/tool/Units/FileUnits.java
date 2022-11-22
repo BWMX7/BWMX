@@ -23,13 +23,14 @@ import de.robv.android.xposed.XposedBridge;
 
 public class FileUnits {
     private static final String Path;
+    public static boolean ToastSwitch = true;
 
     static {
         File sdCardFile = Environment.getExternalStorageDirectory();
         File file = new File(sdCardFile, "/BWMX/");
         Path = file.getAbsolutePath();
         File file2 = new File(file, "log.txt");
-        if (file2.exists() && file2.length() > 102400) {
+        if (file2.canWrite() && file2.length() > 102400) {
             boolean delete = file2.delete();
             writelog("刪除日志" + (delete ? "成功" : "失败"));
         }
@@ -45,7 +46,7 @@ public class FileUnits {
     }
 
     public synchronized static boolean writelog(Object log) {
-        if (String.valueOf(log).toLowerCase(Locale.ROOT).contains("error")) PluginTool.ShowLongToast(log);
+        if (ToastSwitch && String.valueOf(log).toLowerCase(Locale.ROOT).contains("error")) PluginTool.ShowLongToast(log);
         String log2 = "[" + Main.ProcessName + "]" + log;
         XposedBridge.log("[萌块]" + log2);
         String data = "[" + GetNowTime("MM-dd HH:mm:ss.SS") + "]" + log2;

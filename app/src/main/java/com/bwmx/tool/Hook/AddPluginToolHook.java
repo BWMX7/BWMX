@@ -9,6 +9,7 @@ import com.bwmx.tool.Main;
 import com.bwmx.tool.Units.MethodFinder;
 import com.bwmx.tool.Units.PluginTool;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -97,31 +98,31 @@ public class AddPluginToolHook extends BaseHook{
                 obj[0] = "成功";
                 Log(XposedHelpers.getStaticObjectField(aClass, "loaders"));
                 break;
-//            case "RestartLoad" :
-//                try {
-//                    Field field1 = XposedHelpers.findField(objArr[0].getClass(), "javaObject");
-//                    Log(field1.toString());
-//                    Object obj2 = field1.get(objArr[0]);
-//                    Log(obj2);
-//                    Field field2 = XposedHelpers.findField(obj2.getClass(), "info_");
-//                    Log(field2.toString());
-//                    Object PluginInfo = field2.get(obj2);
-//                    Log(PluginInfo);
-//                    Field field3 = XposedHelpers.findField(PluginInfo.getClass(), "a");
-//                    Log(field3.toString());
-//                    String PluginID = (String) field3.get(PluginInfo);
-//                    Log(PluginID);
-//                    Class<?> classIfExists = XposedHelpers.findClassIfExists("cc.hicore.qtool.JavaPlugin.Controller.a", PluginInfo.getClass().getClassLoader());
-//                    if (classIfExists != null)
-//                    {
-//                        Log(classIfExists);
-//                        XposedHelpers.callStaticMethod(classIfExists, "j", PluginID);
-//                        XposedHelpers.callStaticMethod(classIfExists, "f", PluginInfo);
-//                    }
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//                break;
+            case "RestartLoad" :
+                try {
+                    Field field1 = XposedHelpers.findField(objArr[0].getClass(), "javaObject");
+                    Log(field1.toString());
+                    Object obj2 = field1.get(objArr[0]);
+                    Log(obj2);
+                    Field field2 = XposedHelpers.findField(obj2.getClass(), "info_");
+                    Log(field2.toString());
+                    Object PluginInfo = field2.get(obj2);
+                    Log(PluginInfo);
+                    Field field3 = XposedHelpers.findField(PluginInfo.getClass(), "a");
+                    Log(field3.toString());
+                    String PluginID = (String) field3.get(PluginInfo);
+                    Log(PluginID);
+                    Class<?> classIfExists = XposedHelpers.findClassIfExists("cc.hicore.qtool.JavaPlugin.Controller.a", PluginInfo.getClass().getClassLoader());
+                    if (classIfExists != null)
+                    {
+                        Log(classIfExists);
+                        XposedHelpers.callStaticMethod(classIfExists, "j", PluginID);
+                        XposedHelpers.callStaticMethod(classIfExists, "f", PluginInfo);
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                break;
             case "AddMenuItem" :
                 Tool tool = new Tool(objArr[0], (String) objArr[1], (String) objArr[2], (Integer) objArr[3]);
                 QQCustomMenuItemHook.addItem((String[]) objArr[4], tool);
@@ -175,6 +176,7 @@ public class AddPluginToolHook extends BaseHook{
             if (NameSpace == null || BshMethod == null || Interpreter == null) return Remove;
             Object methods = XposedHelpers.getObjectField(NameSpace, "methods");
 //            Log(methods);
+
             if (methods == null) return Remove;
             if (!(methods instanceof Hashtable)) return Remove;
 //            if (!((Hashtable<?, ?>)methods).contains(BshMethod)) return Remove;

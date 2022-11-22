@@ -187,32 +187,38 @@ public class PluginTool {
     }
 
     public static long GetAudioDuration(String path){
-        try{
-            File file = new File(path);
-            if(!file.exists()) return 0;
+        File file = new File(path);
+        if(!file.exists()) return 0;
 
-            long size = file.length();
+        long size = file.length();
 
+        String type = GetAudioType(file);
+        if (type.equals("silk")) return 0;
+
+        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(path);
+        long time1 = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+        long bitRate = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
+        mmr.release();
+        //Toast(1);
+        float time2 = (size * 8000f) / bitRate;
+        FileUnits.writelog(file.getName() + " 读取:" + (time1 / 1000f) + ", 计算: " + (time2 /1000f));
+        if(time1 - time2 < 5000) return time1;
+        return (long) time2 - 2000;
+    }
+
+    public static String GetAudioType(File file)
+    {
+        try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String text = bufferedReader.readLine();
             bufferedReader.close();
-
-            if (text.startsWith("\u0002#!SILK_V")) return 0;
-
-            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-            mmr.setDataSource(path);
-            long time1 = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-            long bitRate = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
-            mmr.release();
-            //Toast(1);
-            float time2 = (size * 8000f) / bitRate;
-            FileUnits.writelog(file.getName() + " 读取:" + (time1 / 1000f) + ", 计算: " + (time2 /1000f));
-            if(time1 - time2 < 5000) return time1;
-            return (long) time2 - 2000;
+            if (text.startsWith("\u0002#!SILK_V")) return "silk";
+            if (text.startsWith("#!AMR")) return "amr";
         } catch (IOException e) {
-            FileUnits.writelog(e);
+            e.printStackTrace();
         }
-        return 0;
+        return "other";
     }
 
 }

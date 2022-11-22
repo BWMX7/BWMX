@@ -9,12 +9,13 @@ import com.bwmx.tool.Hook.AddPluginToolHook;
 import com.bwmx.tool.Hook.BaseHook;
 import com.bwmx.tool.Hook.BubbleTextColorHook;
 import com.bwmx.tool.Hook.ForwardRecentDisplayHook;
+import com.bwmx.tool.Hook.MessageForPttHook;
 import com.bwmx.tool.Hook.MsgListScrollerHook;
-import com.bwmx.tool.Hook.PttRedPacketFlagHook;
 import com.bwmx.tool.Hook.SignatureCheckHook;
 import com.bwmx.tool.Hook.StructMsgHook;
 import com.bwmx.tool.Hook.TroopMemberListHook;
 import com.bwmx.tool.Hook.VasSwitcherHook;
+import com.bwmx.tool.Hook.VipColorNickHook;
 import com.bwmx.tool.Units.Data.SwitchData;
 import com.bwmx.tool.Units.HostInfo;
 import com.bwmx.tool.Units.MethodFinder;
@@ -60,6 +61,8 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
 //            if (!processName.equals("")) return;
             if (!processName.equals("QQ")) ProcessName = processName;
             if (!ProcessName.contains("Main") && !ProcessName.contains("openSdk")) return;
+
+            HookSwitches = new SwitchData();
             Log("-> Load QQ");
 //            if (mLoader == null)
             mLoader = loadPackageParam.classLoader;
@@ -76,8 +79,6 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
 
                     HostInfo.Init();
                     Log("HostInfo：" + HostInfo.getVersion() + "_" + HostInfo.getVerCode());
-
-                    HookSwitches = new SwitchData();
 
                     if (ProcessName.contains("openSdk")) {
                         SignatureCheckHook.Init2();
@@ -105,8 +106,8 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                     VasSwitcherHook.Init2();
                                     StructMsgHook.Hook();
                                     ForwardRecentDisplayHook.Init();
-                                    PttRedPacketFlagHook.Init();
-//                       VipColorNickHook.Hook();
+                                    MessageForPttHook.Init();
+                                    VipColorNickHook.Init();
 
                                     Method MethodIfExists3 = MethodFinder.GetMethod("HelperProvider", "init");
                                     if (MethodIfExists3 != null) {

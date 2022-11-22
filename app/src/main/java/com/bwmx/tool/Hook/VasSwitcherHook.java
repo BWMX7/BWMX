@@ -25,8 +25,8 @@ public class VasSwitcherHook extends BaseHook
 
     static
     {
-        Switch1 = Main.HookSwitches.GetSwitch("ThemeSwitcher");
-        Switch2 = Main.HookSwitches.GetSwitch("BubbleSwitcher");
+        Switch1 = Main.HookSwitches.GetSwitch("ThemeSwitcher", false);
+        Switch2 = Main.HookSwitches.GetSwitch("BubbleSwitcher", false);
     }
 
     public static void Init1()
@@ -101,13 +101,13 @@ public class VasSwitcherHook extends BaseHook
         return !HasNull(Unhook3, Unhook4);
     }
 
-    private static Boolean UnHook1() {
+    private static boolean UnHook1() {
         Unhook1 = UnHook(Unhook1);
         Unhook2 = UnHook(Unhook2);
         return HasNull(Unhook1, Unhook2);
     }
 
-    private static Boolean UnHook2() {
+    private static boolean UnHook2() {
         Unhook3 = UnHook(Unhook3);
         Unhook4 = UnHook(Unhook4);
         return HasNull(Unhook3, Unhook4);

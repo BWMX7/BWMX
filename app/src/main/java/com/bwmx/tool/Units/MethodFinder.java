@@ -382,8 +382,8 @@ public class MethodFinder {
             case "ThemeHandler.SwitchTheme": {
                 AtomicReference<String> methodName = new AtomicReference<>("b");
                 if (QQ_version >= QQVersion.QQ8_9_18) methodName.set("b5");
-                else if (QQ_version >= 9425) methodName.set("d5");
-                else if (QQ_version >= 9280) methodName.set("g5");
+                else if (QQ_version >= QQVersion.QQ8_9_15) methodName.set("d5");
+                else if (QQ_version >= QQVersion.QQ8_9_13) methodName.set("g5");
                 else if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("i5");
                 return FindMethod(classes, methodName.get(), String.class, String.class);
             }
@@ -456,7 +456,7 @@ public class MethodFinder {
         if(ContainsKey) return ClassMap.get(classname);
         else {
             Class<?> classes = FindMyClass(classname);
-            if (classes != null) ClassMap.put(classname,classes);
+            ClassMap.put(classname,classes);
             return classes;
         }
     }
@@ -469,19 +469,21 @@ public class MethodFinder {
         if (ContainsClassKey) return MethodMap.get(name);
         else {
             Method method = FindMyMethod(classname, methodname);
-            if (method != null) MethodMap.put(name, method);
+            MethodMap.put(name, method);
             return method;
         }
     }
 
     @Nullable
-    public static Object QRoteApi(String ClassName)
+    public static Object QRoteApi(String ClassName, String methodName, Object... objects)
     {
         Class<?> classIfExists = GetClass("QRoute");
         if (classIfExists == null) return null;
         Class<?> classIfExists2 = GetClass(ClassName);
         if (classIfExists2 == null) return null;
-        return XposedHelpers.callStaticMethod(classIfExists, "api", classIfExists2);
+        Object api = XposedHelpers.callStaticMethod(classIfExists, "api", classIfExists2);
+        if (api ==null) return null;
+        return XposedHelpers.callMethod(api, methodName, objects);
     }
 
     @Nullable

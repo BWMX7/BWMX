@@ -23,7 +23,8 @@ public class StructMsgHook {
                 protected void beforeHookedMethod(MethodHookParam param) {
                     Bundle bundle = (Bundle) param.args[0];
                     int i = bundle.getInt("req_type", 146);
-                    if (i == 1) {
+                    boolean change = bundle.getBoolean("needChange", false);
+                    if (i == 1 && change) {
                         bundle.remove("req_share_id");
                         bundle.remove("req_pkg_name");
                         bundle.remove("desc");
@@ -48,12 +49,12 @@ public class StructMsgHook {
             XposedHelpers.findAndHookConstructor(ClassIfExists2, Bundle.class, new XC_MethodHook() {
                 @Override
                 protected void beforeHookedMethod(MethodHookParam param) {
-                    APKData.APP app = SignatureCheckHook.APK.RandomApp(-1);
-                    if (app == null) return;
                     Bundle bundle = (Bundle) param.args[0];
 //                    long id = bundle.getLong("req_share_id", 0);
                     boolean change = bundle.getBoolean("needChange", false);
                     if (!change) return;
+                    APKData.APP app = SignatureCheckHook.APK.RandomApp(-1);
+                    if (app == null) return;
                     bundle.remove("needChange");
                     bundle.remove("req_share_id");
                     bundle.remove("req_pkg_name");
