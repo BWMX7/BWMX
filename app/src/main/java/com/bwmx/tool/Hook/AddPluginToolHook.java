@@ -132,6 +132,10 @@ public class AddPluginToolHook extends BaseHook{
                 PluginCallBack pluginCallBack = new PluginCallBack(objArr[0], (String) objArr[1]);
                 obj[0] = SendMsgHook.addCallBack(pluginCallBack);
                 break;
+            case "ChangeEmotionPanelInfo":
+                if (EmoticonPanelInfoDataListHook.ChangeSwitch(true)) obj[0] = EmoticonPanelInfoDataListHook.EmotionPanelInfoData.ChangeEmotionPanelInfo((Integer) objArr[0], (String) objArr[1], (Integer) objArr[2]);
+                else obj[0] = "添加到表情列表错误：Hook启动失败";
+                break;
             default:
                 return objArr;
         }

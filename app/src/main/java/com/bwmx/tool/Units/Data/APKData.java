@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Locale;
 
 
 public class APKData extends BaseData{

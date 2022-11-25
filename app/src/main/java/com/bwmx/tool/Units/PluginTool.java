@@ -202,7 +202,7 @@ public class PluginTool {
         mmr.release();
         //Toast(1);
         float time2 = (size * 8000f) / bitRate;
-        FileUnits.writelog(file.getName() + " 读取:" + (time1 / 1000f) + ", 计算: " + (time2 /1000f));
+//        FileUnits.writelog(file.getName() + " 读取:" + (time1 / 1000f) + ", 计算: " + (time2 /1000f));
         if(time1 - time2 < 5000) return time1;
         return (long) time2 - 2000;
     }

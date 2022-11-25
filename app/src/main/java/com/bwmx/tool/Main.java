@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.bwmx.tool.Hook.AddPluginToolHook;
 import com.bwmx.tool.Hook.BaseHook;
 import com.bwmx.tool.Hook.BubbleTextColorHook;
+import com.bwmx.tool.Hook.EmoticonPanelInfoDataListHook;
 import com.bwmx.tool.Hook.ForwardRecentDisplayHook;
 import com.bwmx.tool.Hook.MessageForPttHook;
 import com.bwmx.tool.Hook.MsgListScrollerHook;
@@ -121,6 +122,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                                 TroopMemberListHook.Hook();
                                                 MsgListScrollerHook.Init();
                                                 BubbleTextColorHook.Init();
+                                                EmoticonPanelInfoDataListHook.Init();
                                             }
                                         });
                                     }

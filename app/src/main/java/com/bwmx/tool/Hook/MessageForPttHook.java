@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import de.robv.android.xposed.XC_MethodHook;
@@ -33,7 +34,8 @@ public class MessageForPttHook extends BaseHook{
     private static final ArrayList<Object> MsgList = new ArrayList<>();
     private static final ArrayList<Object> SttMsgList = new ArrayList<>();
 
-    private static final String[] Code = new String[]{"sss", "ss", "s", "a", "b", "c"};
+    private static final ArrayList<String> Code = new ArrayList<>(Arrays.asList("sss", "ss", "s", "a", "b", "c"));
+    private static final ArrayList<Integer> SpecialBubbleIdList = new ArrayList<>(Arrays.asList(2244, 2439, 2477, 2481, 2483, 2485, 2906, 2907));
 
     static  {
         MethodHook1 = new XC_MethodHook() {
@@ -47,7 +49,7 @@ public class MessageForPttHook extends BaseHook{
                 if (msgClass.equals(MethodFinder.GetClass("MessageForPtt"))) {
 
                     XposedHelpers.setIntField(msg, "voiceRedPacketFlag", 2);
-                    XposedHelpers.callMethod(msg, "saveExtInfoToExtStr", "voice_score_id", Code[new Random().nextInt(Code.length)]);
+                    XposedHelpers.callMethod(msg, "saveExtInfoToExtStr", "voice_score_id", Code.get(new Random().nextInt(Code.size())));
                     XposedHelpers.setBooleanField(msg, "isResend" , true);
 
                     XposedHelpers.setIntField(msg, "voiceChangeFlag", 3);
@@ -84,7 +86,6 @@ public class MessageForPttHook extends BaseHook{
                 super.beforeHookedMethod(param);
                 Object msg = param.args[1];
 
-
                 if (MsgList.contains(msg)) return;
 //                Log(msg);
 //                LogStackTrace(HookName);
@@ -92,29 +93,35 @@ public class MessageForPttHook extends BaseHook{
 
                 if (!(Boolean) XposedHelpers.callMethod(msg, "isSendFromLocal")) {
                     new java.lang.Thread(() -> {
-                        XposedHelpers.setIntField(msg, "voiceRedPacketFlag", 0);
-                        XposedHelpers.callMethod(msg, "saveExtInfoToExtStr", "voice_score_id", "");
-//                        XposedHelpers.setBooleanField(msg, "isResend", false);
-
-//
-//                        XposedHelpers.setIntField(msg, "sttAbility", 2);
-
                         String path = (String) XposedHelpers.callMethod(msg, "getLocalFilePath");
                         String type = PluginTool.GetAudioType(new File(path));
                         if (type.equals("silk") || type.equals("amr")) {
-//                            XposedHelpers.setIntField(msg, "autoToText", 1);
+                            XposedHelpers.setIntField(msg, "autoToText", 1);
+
                             XposedHelpers.setIntField(msg, "sttAbility", 3);
-                            if (XposedHelpers.getIntField(msg, "voiceChangeFlag") != 0) {
-                                XposedHelpers.setIntField(msg, "voiceChangeFlag", 0);
-                                XposedHelpers.setObjectField(msg, "sttText", null);
-                            }
-//                        XposedHelpers.setBooleanField(msg, "expandStt", true);
+                            XposedHelpers.setObjectField(msg, "sttText", null);
+
+                            XposedHelpers.setIntField(msg, "voiceRedPacketFlag", 0);
+
+                            XposedHelpers.setIntField(msg, "voiceChangeFlag", 0);
+
+                            XposedHelpers.setBooleanField(msg, "expandStt", true);
+
                             SttMsgList.add(msg);
                         }
                         else {
                             XposedHelpers.setIntField(msg, "autoToText", 0);
                             XposedHelpers.setIntField(msg, "sttAbility", 0);
                         }
+
+                        int bubbleID = (int) MethodFinder.BusinessHandler("SVIP_HANDLER", "getBubbleIdFromMessageRecord", msg);
+                        if (SpecialBubbleIdList.contains(bubbleID))
+                        {
+                            int SelfBubbleID = (int) MethodFinder.BusinessHandler("SVIP_HANDLER", "getSelfBubbleId");
+                            XposedHelpers.setLongField(msg, "vipBubbleID", SelfBubbleID);
+                            Log(bubbleID + " -> " + SelfBubbleID);
+                        }
+
                         ReSetTime(msg);
 
                     }).start();
@@ -193,6 +200,7 @@ public class MessageForPttHook extends BaseHook{
         int duration = (int) (PluginTool.GetAudioDuration(path) / 1000);
         XposedHelpers.setIntField(msg, "voiceLength", duration);
         XposedHelpers.setObjectField(msg, "timeStr", TimeToStr(duration));
+
         XposedHelpers.callMethod(msg, "prewrite");
     }
 

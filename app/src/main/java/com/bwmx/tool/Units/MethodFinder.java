@@ -291,6 +291,26 @@ public class MethodFinder {
                 if (QQ_version >= QQVersion.QQ8_8_90) className.set("com.tencent.mobileqq.activity.aio.item.PttItemBuilder$c");
                 return FindClass(className.get());
             }
+            case "EmoticonPanelController": {
+                String className = "com.tencent.mobileqq.emoticonview.EmoticonPanelController";
+                return FindClass(className);
+            }
+            case "EmoticonPackage": {
+                String className = "com.tencent.mobileqq.data.EmoticonPackage";
+                return FindClass(className);
+            }
+            case "EmotionPanelInfo": {
+                String className = "com.tencent.mobileqq.emoticonview.EmotionPanelInfo";
+                return FindClass(className);
+            }
+            case "IEmoticonManagerService": {
+                String className = "com.tencent.mobileqq.emosm.api.IEmoticonManagerService";
+                return FindClass(className);
+            }
+            case "IEmojiManagerService": {
+                String className = "com.tencent.mobileqq.emoticon.api.IEmojiManagerService";
+                return FindClass(className);
+            }
             default:
                 return FindClass(name);
         }
@@ -446,6 +466,9 @@ public class MethodFinder {
                 else if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("V0");
                 return FindMethod(classes, methodName.get(), GetClass("PttItemBuilder$Holder"), GetClass("MessageForPtt"));
             }
+            case "EmoticonPanelController.getPanelDataList": {
+                return FindMethod(classes, "getPanelDataList");
+            }
         }
         return null;
     }
@@ -482,7 +505,7 @@ public class MethodFinder {
         Class<?> classIfExists2 = GetClass(ClassName);
         if (classIfExists2 == null) return null;
         Object api = XposedHelpers.callStaticMethod(classIfExists, "api", classIfExists2);
-        if (api ==null) return null;
+        if (api == null) return null;
         return XposedHelpers.callMethod(api, methodName, objects);
     }
 
@@ -491,13 +514,22 @@ public class MethodFinder {
     {
         Class<?> classIfExists = GetClass("BusinessHandlerFactory");
         if (classIfExists == null) return null;
-//        Field field1 = XposedHelpers.findFieldIfExists(classIfExists, HandlerName);
-//        if (field1 == null) return null;
         String handlerName = (String) XposedHelpers.getStaticObjectField(classIfExists, HandlerName);
         if (TextUtils.isEmpty(handlerName)) return null;
         Object handler = XposedHelpers.callMethod(Main.Runtime, "getBusinessHandler", handlerName);
         if (handler == null) return null;
         return XposedHelpers.callMethod(handler, methodName, objects);
+    }
+
+    @Nullable
+    public static Object RuntimeService(String ClassName, String methodName, Object... objects)
+    {
+        if (Main.Runtime == null) return null;
+        Class<?> classIfExists = GetClass(ClassName);
+        if (classIfExists == null) return null;
+        Object service = XposedHelpers.callMethod(Main.Runtime, "getRuntimeService", classIfExists);
+        if (service == null) return null;
+        return XposedHelpers.callMethod(service, methodName, objects);
     }
 
 }

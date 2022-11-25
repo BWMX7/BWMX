@@ -36,14 +36,14 @@ public class BaseHook {
 
 
 
-    public static XC_MethodHook.Unhook Hook(Method method,XC_MethodHook methodHook, XC_MethodHook.Unhook unhook)
+    protected static XC_MethodHook.Unhook Hook(Method method,XC_MethodHook methodHook, XC_MethodHook.Unhook unhook)
     {
         if (unhook != null) return unhook;
         else if (method != null) return XposedBridge.hookMethod(method, methodHook);
         else return null;
     }
 
-    public static XC_MethodHook.Unhook UnHook(XC_MethodHook.Unhook unhook) {
+    protected static XC_MethodHook.Unhook UnHook(XC_MethodHook.Unhook unhook) {
         if (unhook == null) return null;
         try {
             unhook.unhook();
@@ -64,7 +64,7 @@ public class BaseHook {
         return false;
     }
 
-    public static boolean ChangeSwitch(Boolean newSwitch, Boolean oldSwitch)
+    protected static boolean ChangeSwitch(Boolean newSwitch, Boolean oldSwitch)
     {
         boolean change;
         if (newSwitch != null) change = newSwitch;

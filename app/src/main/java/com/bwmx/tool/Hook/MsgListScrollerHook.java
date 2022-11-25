@@ -1,7 +1,6 @@
 package com.bwmx.tool.Hook;
 
 
-import com.bwmx.tool.Units.FileUnits;
 import com.bwmx.tool.Units.MethodFinder;
 
 import java.lang.reflect.Method;
@@ -21,12 +20,6 @@ public class MsgListScrollerHook extends BaseHook{
         MethodHook1 = new XC_MethodReplacement() {
             @Override
             protected Object replaceHookedMethod(MethodHookParam param) {
-//                    StackTraceElement[] wodelogs = new Throwable("wodelog").getStackTrace();
-//                    String log = "";
-//                    // 使用for循环打印 调用栈查看调用关系
-//                    for(int i = 0;i<wodelogs.length;i++){
-//                        log +=  wodelogs[i].toString();
-//                    }
                 Log("Stop Once Scroll" );
 //                    FileUnits.writelog("TroopMsgListScroller\n" + log);
 //                    if (OPEN) FileUnits.writelog("TroopMsgListScroller stop once scroll" );
@@ -52,9 +45,6 @@ public class MsgListScrollerHook extends BaseHook{
 
     private static Boolean Hook() {
         Method MethodIfExists1 = MethodFinder.GetMethod("MsgListScroller", "ScrollTo0");
-        //        Method MethodIfExists2 = MethodFinder.GetMethod("MsgListScroller", "scroll");
-//        if (MethodIfExists1 != null && MethodIfExists2 != null) {
-//                FileUnits.writelog("StructMsgFactory OK");
         Unhook1 = Hook(MethodIfExists1, MethodHook1, Unhook1);
 //        Log("Hook " + Unhook1);
         return !HasNull(Unhook1);
@@ -69,17 +59,9 @@ public class MsgListScrollerHook extends BaseHook{
     public static Boolean ChangeSwitch(Boolean newSwitch)
     {
         Switch = ChangeSwitch(newSwitch,Switch);
-        Log("ChangeSwitch To " + Switch);
         if (Switch) return Hook();
         else return !UnHook();
     }
 
-
-//    public static boolean ChangeStopScroller(Boolean open)
-//    {
-//        if (open == null) OPEN = !OPEN;
-//        else OPEN = open;
-//        return OPEN;
-//    }
 
 }
