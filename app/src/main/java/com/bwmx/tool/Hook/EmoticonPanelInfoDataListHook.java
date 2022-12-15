@@ -38,12 +38,19 @@ public class EmoticonPanelInfoDataListHook extends BaseHook{
     }
 
     private static boolean Hook() {
-        Method MethodIfExists1 = MethodFinder.GetMethod("EmoticonPanelController", "getPanelDataList");
+//        Method MethodIfExists1 = MethodFinder.GetMethod("EmoticonPanelController", "getPanelDataList");
+        Method MethodIfExists1 = MethodFinder.GetMethod("EmoticonPanelTabSortHelper", "getSortEmotionPanelInfoList");
         Unhook = Hook(MethodIfExists1, new XC_MethodHook() {
             @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                super.afterHookedMethod(param);
-                param.setResult(AddEmoticonTabItem(param.getResult()));
+//            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+//                super.afterHookedMethod(param);
+//                param.setResult(AddEmoticonTabItem(param.getResult()));
+//                XposedHelpers.callMethod(param.thisObject, "updateTabSortLastSelectedSecondTabIndex");
+//            }
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                super.beforeHookedMethod(param);
+//                LogStackTrace(HookName);
+                param.args[0] = (AddEmoticonTabItem(param.args[0]));
             }
         }, Unhook);
         return !HasNull(Unhook);
@@ -92,11 +99,17 @@ public class EmoticonPanelInfoDataListHook extends BaseHook{
 
                 int type = XposedHelpers.getIntField(emotionPanelInfo, "type");
 
-                if (hashMap.containsKey(epId))
+                if (hashMap.containsKey(epId) && hashMap.get(epId) == type)
                 {
-                    if (hashMap.get(epId) == type) it.remove();
+                    it.remove();
+                    continue;
                 }
-                else hashMap.put(epId, type);
+                hashMap.put(epId, type);
+                if (type == 10) {
+                    XposedHelpers.setIntField(emoticonPackage, "jobType", 4);
+                    XposedHelpers.setBooleanField(emoticonPackage, "valid", true);
+                }
+//                Log(emoticonPackage);
             }
         }
         return emotionPanelInfoList;

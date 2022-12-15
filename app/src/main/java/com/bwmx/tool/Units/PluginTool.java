@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
 import android.media.MediaMetadataRetriever;
 import android.os.Handler;
 import android.os.Looper;
@@ -83,7 +85,7 @@ public class PluginTool {
         clipboardManager.setPrimaryClip(clipData);
     }
 
-    @NonNull
+    @Nullable
     public static JSONObject Hitokoto(String word)
     {
         String tp;
@@ -128,17 +130,16 @@ public class PluginTool {
             }
         }
         String url = "https://v1.hitokoto.cn/" + tp;
-        JSONObject msg;
         try
         {
             String tt = HttpGet(url);
             JSONObject json = new JSONObject(tt);
             if(!json.has("hitokoto")) return Hitokoto(word);
-            else msg=json;
-            return msg;
+            else return json;
         }
         catch (JSONException e) {
-            return Hitokoto(word);
+            return null;
+//            return Hitokoto(word);
         }
 
     }
@@ -186,39 +187,90 @@ public class PluginTool {
         return builder.toString();
     }
 
-    public static long GetAudioDuration(String path){
-        File file = new File(path);
-        if(!file.exists()) return 0;
+    public static long GetAudioDuration(File file)
+    {
+        if (file == null) return 0;
+        if(!file.canRead()) return 0;
 
         long size = file.length();
-
+        if (size > 0) {
         String type = GetAudioType(file);
-        if (type.equals("silk")) return 0;
-
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(path);
-        long time1 = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
-        long bitRate = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
-        mmr.release();
-        //Toast(1);
-        float time2 = (size * 8000f) / bitRate;
+        if (type.equals("silk")) try {
+                Integer time = (Integer) MethodFinder.QRoteApi("IQQRecorderUtils", "getFilePlayTime", file.getAbsolutePath());
+                return time == null ? 0 : time * 1000L;
+        } catch (Exception ignored) {}
+        else try {
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                mmr.setDataSource(file.getAbsolutePath());
+                long time1 = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                long bitRate = Long.parseLong(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE));
+                mmr.release();
+                //Toast(1);
+                float time2 = (size * 8000f) / bitRate;
 //        FileUnits.writelog(file.getName() + " 读取:" + (time1 / 1000f) + ", 计算: " + (time2 /1000f));
-        if(time1 - time2 < 5000) return time1;
-        return (long) time2 - 2000;
+                if (time1 - time2 < 5000) return time1;
+                return (long) time2 - 2000;
+        } catch (IllegalArgumentException ignored) {}
+        }
+        return 0;
     }
 
+    @NonNull
+    public static String GetAudioType(String path)
+    {
+        return GetAudioType(new File(path));
+    }
+
+    @NonNull
     public static String GetAudioType(File file)
     {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            String text = bufferedReader.readLine();
+            String head = bufferedReader.readLine();
             bufferedReader.close();
-            if (text.startsWith("\u0002#!SILK_V")) return "silk";
-            if (text.startsWith("#!AMR")) return "amr";
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "other";
+            if (head.startsWith("\u0002#!SILK_V")) return "silk";
+            if (head.startsWith("#!AMR")) return "amr";
+            if (head.startsWith("fLaC")) return "flac";
+            if (head.contains("WAVEfmt")) return "wav";
+
+            MediaFormat inputFormat = GetAudioFormat(file.getAbsolutePath());
+            if (inputFormat != null) {
+                String mime = inputFormat.getString(MediaFormat.KEY_MIME);
+                if (mime.equals("audio/mpeg")) return "mp3";
+                if (mime.equals("audio/opus")) return "opus";
+                if (mime.equals("audio/vorbis")) return "ogg";
+                if (mime.equals("audio/3gpp")) return "3gp";
+                if (mime.contains("audio/mp4a")) {
+                    boolean ifm4a = (inputFormat.containsKey("encoder-delay"));
+                    if (ifm4a) return "m4a";
+                    return "aac";
+                } else return mime;
+            }
+        } catch (IOException ignored) {}
+        return "unknown";
     }
+
+    @Nullable
+    public static MediaFormat GetAudioFormat(String path)
+    {
+        try{
+            MediaExtractor mExtractor = new MediaExtractor();
+            mExtractor.setDataSource(path);
+
+            int count = mExtractor.getTrackCount();
+            for (int i = 0; i < count; i++) {
+                MediaFormat format = mExtractor.getTrackFormat(i);
+                //获取 mime 类型
+                String mime = format.getString(MediaFormat.KEY_MIME);
+                if (mime.startsWith("audio")) {
+                    //音频轨
+                    return format;
+                }
+            }
+//            mExtractor.release();
+        } catch (IOException ignored) {}
+        return null;
+    }
+
 
 }

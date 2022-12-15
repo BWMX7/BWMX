@@ -291,10 +291,14 @@ public class MethodFinder {
                 if (QQ_version >= QQVersion.QQ8_8_90) className.set("com.tencent.mobileqq.activity.aio.item.PttItemBuilder$c");
                 return FindClass(className.get());
             }
-            case "EmoticonPanelController": {
-                String className = "com.tencent.mobileqq.emoticonview.EmoticonPanelController";
+            case "IQQRecorderUtils": {
+                String className = "com.tencent.mobileqq.ptt.IQQRecorderUtils";
                 return FindClass(className);
             }
+//            case "EmoticonPanelController": {
+//                String className = "com.tencent.mobileqq.emoticonview.EmoticonPanelController";
+//                return FindClass(className);
+//            }
             case "EmoticonPackage": {
                 String className = "com.tencent.mobileqq.data.EmoticonPackage";
                 return FindClass(className);
@@ -307,8 +311,17 @@ public class MethodFinder {
                 String className = "com.tencent.mobileqq.emosm.api.IEmoticonManagerService";
                 return FindClass(className);
             }
-            case "IEmojiManagerService": {
-                String className = "com.tencent.mobileqq.emoticon.api.IEmojiManagerService";
+//            case "IEmojiManagerService": {
+//                String className = "com.tencent.mobileqq.emoticon.api.IEmojiManagerService";
+//                return FindClass(className);
+//            }
+            case "EmoticonPanelTabSortHelper": {
+                String className = "com.tencent.mobileqq.emoticonview.EmoticonPanelTabSortHelper";
+                return FindClass(className);
+            }
+
+            case "ExtensionInfo": {
+                String className = "com.tencent.mobileqq.data.ExtensionInfo";
                 return FindClass(className);
             }
             default:
@@ -466,9 +479,17 @@ public class MethodFinder {
                 else if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("V0");
                 return FindMethod(classes, methodName.get(), GetClass("PttItemBuilder$Holder"), GetClass("MessageForPtt"));
             }
-            case "EmoticonPanelController.getPanelDataList": {
-                return FindMethod(classes, "getPanelDataList");
+//            case "EmoticonPanelController.getPanelDataList": {
+//                return FindMethod(classes, "getPanelDataList");
+//            }
+            case "EmoticonPanelTabSortHelper.getSortEmotionPanelInfoList": {
+                return FindMethod(classes, "getSortEmotionPanelInfoList",List.class);
             }
+//            case "GetStrangerVasInfoHandler.SwitchPendantDiyId": {
+//                AtomicReference<String> methodName = new AtomicReference<>("a");
+//                if (QQ_version >= QQVersion.QQ8_8_90) methodName.set("v");
+//                return FindMethod(classes, methodName.get(), GetClass("oidb_0x5eb$UdcUinData"), boolean.class, String.class, GetClass("ExtensionInfo"));
+//            }
         }
         return null;
     }

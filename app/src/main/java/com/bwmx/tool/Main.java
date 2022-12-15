@@ -103,8 +103,7 @@ public class Main extends BaseHook implements IXposedHookLoadPackage{
                                     Log("MyUin：" + MyUin);
 
                                     AddPluginToolHook.Init();
-                                    VasSwitcherHook.Init1();
-                                    VasSwitcherHook.Init2();
+                                    VasSwitcherHook.Init();
                                     StructMsgHook.Hook();
                                     ForwardRecentDisplayHook.Init();
                                     MessageForPttHook.Init();

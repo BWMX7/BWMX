@@ -2,6 +2,7 @@ package com.bwmx.tool.Units;
 
 import android.os.Environment;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bwmx.tool.Main;
@@ -14,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Objects;
@@ -174,5 +176,38 @@ public class FileUnits {
         }
         return false;
     }
+
+    @NonNull
+    public static String FormatSize(Float size2) {
+        float KB = 1024f;
+        float MB = KB * KB;
+        float GB = MB * KB;
+        float TB = GB * KB;
+
+        String suffix;
+        float size;
+
+        if (size2 >= TB) {
+            suffix = "TB";
+            size = size2 / TB;
+        }
+        else if (size2 >= GB) {
+            suffix = "GB";
+            size = size2 / GB;
+        }
+        else if (size2 >= MB) {
+            suffix = "MB";
+            size = size2 / MB;
+        }
+        else if (size2 >= KB) {
+            suffix = "KB";
+            size = size2 / KB;
+        }
+        else return size2 + "B";
+
+        DecimalFormat format = new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+        return format.format(size) + suffix;
+    }
+
 
 }

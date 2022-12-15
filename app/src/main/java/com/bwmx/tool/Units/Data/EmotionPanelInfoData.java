@@ -3,6 +3,7 @@ package com.bwmx.tool.Units.Data;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.bwmx.tool.Units.FileUnits;
 import com.bwmx.tool.Units.MethodFinder;
@@ -28,22 +29,52 @@ public class EmotionPanelInfoData extends BaseData
         }
     }
 
-    public Object NewEmotionPanelInfo(Integer ColumnNum, String epId, Integer Type)
+    @Nullable
+    private Object NewEmotionPanelInfo(Integer ColumnNum, String epId, Integer Type)
     {
 //        FileUnits.writelog(ColumnNum + " " + epId + " " + Type);
-        Object emoticonPackage = XposedHelpers.newInstance(MethodFinder.GetClass("EmoticonPackage"));
+        Object emoticonPackage = NewEmoticonPackage(epId);
+//        FileUnits.writelog(emoticonPackage);
         if (emoticonPackage != null) {
-            XposedHelpers.setObjectField(emoticonPackage, "epId", epId);
-            XposedHelpers.setIntField(emoticonPackage, "type", 6);
-            XposedHelpers.setIntField(emoticonPackage, "jobType", 4);
-//            FileUnits.writelog("2" + emoticonPackage);
-//                MethodFinder.RuntimeService("IEmoticonManagerService", "saveEmoticonPackage", emoticonPackage2);
-            MethodFinder.RuntimeService("IEmojiManagerService", "pullEmoticonPackage", emoticonPackage, true);
             return XposedHelpers.newInstance(EmotionPanelInfoClass, Type == null ? 0 : Type, ColumnNum == null ? 0 : ColumnNum, emoticonPackage);
         }
         return null;
     }
-    
+
+    @Nullable
+    private Object NewEmoticonPackage(String epId)
+    {
+        try {
+            int id = Integer.parseInt(epId);
+            if (id < 0 || id > 70) return null;
+        } catch (NumberFormatException e) {
+            return null;
+        }
+
+        Object emoticonPackage = MethodFinder.RuntimeService("IEmoticonManagerService", "syncFindEmoticonPackageById", epId);
+        if (emoticonPackage == null) {
+            Object emoticonPackage2 = XposedHelpers.newInstance(MethodFinder.GetClass("EmoticonPackage"));
+            if (emoticonPackage2 == null) return null;
+            XposedHelpers.setObjectField(emoticonPackage2, "epId", epId);
+            XposedHelpers.setObjectField(emoticonPackage2, "name", "萌块-小表情" + epId);
+            XposedHelpers.setIntField(emoticonPackage2, "type", 6);
+//            XposedHelpers.setIntField(emoticonPackage2, "jobType", 4);
+//            FileUnits.writelog("2" + emoticonPackage);
+//            MethodFinder.RuntimeService("IEmoticonManagerService", "saveEmoticonPackage", emoticonPackage2);
+//            MethodFinder.RuntimeService("IEmojiManagerService", "pullEmoticonPackage", emoticonPackage, true);
+            return emoticonPackage2;
+        }
+        else {
+            Integer type = XposedHelpers.getIntField(emoticonPackage, "type");
+            if (type == null || type != 6) return null;
+//            Integer jobType = XposedHelpers.getIntField(emoticonPackage, "jobType");
+//            if (jobType == null || jobType != 4) {
+//                XposedHelpers.setIntField(emoticonPackage, "jobType", 4);
+//
+//            }
+            return emoticonPackage;
+        }
+    }
 
     @NonNull
     private ArrayList<Object> ReadData()
